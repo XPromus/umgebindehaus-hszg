@@ -6,4 +6,4 @@ spring:
     password: password
 
 project:
-  description: todoapp
+  description: "server for Umgebindehaus server-project"
