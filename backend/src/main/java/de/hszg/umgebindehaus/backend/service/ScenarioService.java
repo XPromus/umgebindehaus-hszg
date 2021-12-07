@@ -5,6 +5,7 @@ import de.hszg.umgebindehaus.backend.data.repos.ScenarioRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ScenarioService{
@@ -30,8 +31,8 @@ public class ScenarioService{
         return scenarioRepo.findAll();
     }
 
-    public List<Scenario> listAllScenariosWithName(String name){
-        return scenarioRepo.findAllByName(name);
+    public Optional<Scenario> getScenarioByName(String name){
+        return scenarioRepo.findByName(name);
     }
 
     public void deleteScenario(Scenario scenario){
