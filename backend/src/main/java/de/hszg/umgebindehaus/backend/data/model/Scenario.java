@@ -12,7 +12,7 @@ public class Scenario{
     public Scenario(){
         name = "_undefined_";
         time = LocalDateTime.now();
-        weather = DefaultScenarios.DEFAULT_WEATHER;
+        weather = DefaultScenarios.getInstance().getDefaultWeather();
         timeScale = 1.0;
         automaticWeather = Boolean.TRUE;
         automaticTime = Boolean.TRUE;
