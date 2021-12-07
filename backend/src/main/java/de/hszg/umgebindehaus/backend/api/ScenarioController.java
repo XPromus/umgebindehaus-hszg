@@ -17,7 +17,7 @@ public class ScenarioController {
         this.scenarioService = scenarioService;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public Scenario createScenario(@RequestBody String name) {
         return scenarioService.createScenario(name);
     }
@@ -40,6 +40,11 @@ public class ScenarioController {
     @DeleteMapping("/delete/{id}")
     public void deleteScenario(@PathVariable Integer id) {
         scenarioService.deleteScenario(id);
+    }
+
+    @PostMapping("/edit")
+    public Scenario editScenario(@RequestBody ScenarioEdit changes) {
+        return scenarioService.editScenario(changes);
     }
 
 }
