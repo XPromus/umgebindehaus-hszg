@@ -1,7 +1,5 @@
 package de.hszg.umgebindehaus.backend.data.model;
 
-import de.hszg.umgebindehaus.backend.config.DefaultScenarios;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -12,7 +10,7 @@ public class Scenario{
     public Scenario(){
         name = "_undefined_";
         time = LocalDateTime.now();
-        weather = DefaultScenarios.getInstance().getDefaultWeather();
+        weather = new Weather();
         timeScale = 1.0;
         automaticWeather = Boolean.TRUE;
         automaticTime = Boolean.TRUE;
@@ -50,8 +48,8 @@ public class Scenario{
     public void setName(@NotNull String name){
         this.name = name;
     }
-    @NotNull
 
+    @NotNull
     public LocalDateTime getTime(){
         return time;
     }

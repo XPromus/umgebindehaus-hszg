@@ -1,10 +1,12 @@
 package de.hszg.umgebindehaus.backend.service;
 
+import de.hszg.umgebindehaus.backend.components.DefaultScenarios;
 import de.hszg.umgebindehaus.backend.data.model.Scenario;
 import de.hszg.umgebindehaus.backend.data.model.Weather;
 import de.hszg.umgebindehaus.backend.data.repos.ScenarioRepo;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +19,7 @@ public class ScenarioService{
         this.scenarioRepo = scenarioRepo;
     }
 
+    @Transactional
     public Scenario createScenario(String name){
         final Scenario ret = new Scenario();
         ret.setName(name);
@@ -36,8 +39,9 @@ public class ScenarioService{
         return scenarioRepo.findByName(name);
     }
 
+    @Transactional
     public Scenario editScenario(ScenarioEdit changes){
-        Scenario scenario = getScenarioById(changes.getScenarioId());
+        final Scenario scenario = getScenarioById(changes.getScenarioId());
         if(changes.getNewName() != null){
             scenario.setName(changes.getNewName());
         }
@@ -53,7 +57,7 @@ public class ScenarioService{
         if(changes.getNewAutomaticTime() != null){
             scenario.setAutomaticTime(changes.getNewAutomaticTime());
         }
-        Weather weather = scenario.getWeather();
+        final Weather weather = scenario.getWeather();
         if(changes.getNewWeatherWindDirection() != null){
             weather.setWindDirection(changes.getNewWeatherWindDirection());
         }
@@ -66,6 +70,7 @@ public class ScenarioService{
         return scenarioRepo.save(scenario);
     }
 
+    @Transactional
     public void deleteScenario(Integer scenario){
         scenarioRepo.getOne(scenario);// throw EntityNotFoundException if it does not exist
         scenarioRepo.deleteById(scenario);

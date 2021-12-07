@@ -1,6 +1,7 @@
 package de.hszg.umgebindehaus.backend.data.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Embeddable
 public class Weather{
@@ -9,7 +10,7 @@ public class Weather{
         this(0.0, 0.0, CloudType.CLEAR);
     }
 
-    public Weather(Double windDirection, Double windSpeed, CloudType cloudiness){
+    public Weather(@NotNull Double windDirection, @NotNull Double windSpeed, @NotNull CloudType cloudiness){
         this.windDirection = windDirection;
         this.windSpeed = windSpeed;
         this.cloudiness = cloudiness;
@@ -22,25 +23,34 @@ public class Weather{
     @Column(name = "weather_cloudiness")
     private CloudType cloudiness;
 
+    @NotNull
     public Double getWindDirection(){
         return windDirection;
     }
-    public void setWindDirection(Double windDirection){
+    public void setWindDirection(@NotNull Double windDirection){
         this.windDirection = windDirection;
     }
 
+    @NotNull
     public Double getWindSpeed(){
         return windSpeed;
     }
-    public void setWindSpeed(Double windSpeed){
+    public void setWindSpeed(@NotNull Double windSpeed){
         this.windSpeed = windSpeed;
     }
 
+    @NotNull
     public CloudType getCloudiness(){
         return cloudiness;
     }
-    public void setCloudiness(CloudType cloudiness){
+    public void setCloudiness(@NotNull CloudType cloudiness){
         this.cloudiness = cloudiness;
+    }
+
+    public void applyFrom(Weather other){
+        setWindDirection(other.getWindDirection());
+        setWindSpeed(other.getWindSpeed());
+        setCloudiness(other.getCloudiness());
     }
 
     public enum CloudType{
