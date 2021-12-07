@@ -34,8 +34,8 @@ public class ScenarioService{
         return scenarioRepo.findAllByName(name);
     }
 
-    public void deleteScenario(Scenario scenario){
-        scenarioRepo.getOne(scenario.getId());// throw EntityNotFoundException if it does not exist
-        scenarioRepo.delete(scenario);
+    public void deleteScenario(Integer scenario){
+        scenarioRepo.getOne(scenario);// throw EntityNotFoundException if it does not exist
+        scenarioRepo.deleteById(scenario);
     }
 }
