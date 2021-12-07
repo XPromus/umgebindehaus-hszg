@@ -12,6 +12,7 @@ import java.util.Set;
 public class DefaultScenarios{
 
     public static final Weather DEFAULT_WEATHER = new Weather();
+    public static final Scenario DEFAULT_SCENARIO;
     public static final Set<Scenario> DEFAULT_SCENARIOS;
 
     static{
@@ -20,6 +21,7 @@ public class DefaultScenarios{
         Scenario s1 = new Scenario();
         s1.setName("Example 1");
         set.add(s1);
+        DEFAULT_SCENARIO = s1;
 
         Scenario s2 = new Scenario();
         s2.setName("Example 2");
@@ -31,5 +33,4 @@ public class DefaultScenarios{
 
         DEFAULT_SCENARIOS = Collections.unmodifiableSet(set);
     }
-
 }
