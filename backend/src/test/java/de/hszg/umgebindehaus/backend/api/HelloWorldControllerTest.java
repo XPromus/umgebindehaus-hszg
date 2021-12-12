@@ -15,7 +15,6 @@ public class HelloWorldControllerTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void helloWorldTest() {
-
         RestAssured.port=8080;
 
         final String result = RestAssured.get("/helloWorld").then().
@@ -23,7 +22,6 @@ public class HelloWorldControllerTest extends AbstractTestNGSpringContextTests {
                 .extract().body().asString();
 
         Assertions.assertThat(result).isEqualTo("Hello World!");
-
     }
 
 }
