@@ -1,5 +1,6 @@
 package de.hszg.umgebindehaus.backend.service;
 
+import de.hszg.umgebindehaus.backend.api.error.ResourceNotFoundException;
 import de.hszg.umgebindehaus.backend.components.DefaultScenarios;
 import de.hszg.umgebindehaus.backend.data.model.Scenario;
 import de.hszg.umgebindehaus.backend.data.model.Weather;
@@ -27,8 +28,8 @@ public class ScenarioService{
         return scenarioRepo.save(ret);
     }
 
-    public Scenario getScenarioById(Integer id){
-        return scenarioRepo.getOne(id);
+    public Optional<Scenario> getScenarioById(Integer id){
+        return scenarioRepo.findById(id);
     }
 
     public List<Scenario> listAllScenarios(){
@@ -41,7 +42,12 @@ public class ScenarioService{
 
     @Transactional
     public Scenario editScenario(ScenarioEdit changes){
-        final Scenario scenario = getScenarioById(changes.getScenarioId());
+        Optional<Scenario> optionalScenario = getScenarioById(changes.getScenarioId());
+        if (optionalScenario.isEmpty()) {
+            throw new ResourceNotFoundException("No scenario with the id " + changes.getScenarioId() + " was found.");
+        }
+
+        final Scenario scenario = optionalScenario.get();
         if(changes.getNewName() != null){
             scenario.setName(changes.getNewName());
         }
