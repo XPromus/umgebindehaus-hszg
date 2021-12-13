@@ -89,5 +89,4 @@ public class ScenarioEdit{// DataTransferObject
     public void setNewWeatherCloudiness(@Nullable Weather.CloudType newWeatherCloudiness){
         this.newWeatherCloudiness = newWeatherCloudiness;
     }
-
 }
