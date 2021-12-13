@@ -91,4 +91,54 @@ public class ScenarioControllerTest extends AbstractTestNGSpringContextTests {
 
     }
 
+    @Test
+    public void listAllScenarios() {
+
+        RestAssured.port = 8080;
+        RestAssured.given()
+                .accept(ContentType.JSON)
+                .contentType(ContentType.JSON)
+                .body("Scenario 1")
+                .when()
+                .post("/scenario/create");
+
+        RestAssured.given()
+                .accept(ContentType.JSON)
+                .contentType(ContentType.JSON)
+                .body("Scenario 2")
+                .when()
+                .post("/scenario/create");
+
+        RestAssured.given()
+                .accept(ContentType.JSON)
+                .contentType(ContentType.JSON)
+                .body("Scenario 3")
+                .when()
+                .post("/scenario/create");
+
+        var response = RestAssured.given().get("/scenario/all");
+        response.body().print();
+        response.then().statusCode(200);
+
+    }
+
+    @Test
+    public void getScenarioById() {
+
+        var id = "3";
+
+        RestAssured.port = 8080;
+        RestAssured.given()
+                .accept(ContentType.JSON)
+                .contentType(ContentType.JSON)
+                .body("Test Scenario")
+                .when()
+                .post("/scenario/create");
+
+        var response = RestAssured.given().get("/scenario/id/" + id);
+        var responseBody = response.body().print();
+        response.then().statusCode(200);
+
+    }
+
 }
