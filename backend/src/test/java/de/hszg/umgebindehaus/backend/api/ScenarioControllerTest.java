@@ -88,6 +88,7 @@ public class ScenarioControllerTest extends AbstractTestNGSpringContextTests {
                 .post("/scenario/create");
 
         RestAssured.given().delete("/scenario/delete/3").then().statusCode(200);
+        RestAssured.given().get("/scenario/id/3").then().statusCode(404);
 
     }
 
