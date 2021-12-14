@@ -5,38 +5,21 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class UniqueWordGenerator {
-    private ArrayList<Pair<String, AtomicInteger>> wordList = new ArrayList<>();
 
-    private final Resource res;
-
-    /*public static void main(String[] args) {
-        UniqueWordGenerator uwg = new UniqueWordGenerator();
-        while (true) {
-            System.out.println(uwg.nextWord());
-            try { System.in.read(); }
-            catch (IOException e) { e.printStackTrace(); }
-        }
-
-    }*/
+    private final ArrayList<Pair<String, AtomicInteger>> wordList;
 
     public UniqueWordGenerator() {
-        res = new ClassPathResource("wordlist.txt");
-        ArrayList<String> words = readWordListFile();
-        for (String word: words) {
-            Pair<String, AtomicInteger> wordIntegerPair = Pair.of(word, new AtomicInteger());
-            wordList.add(wordIntegerPair);
-        }
+        var res = new ClassPathResource("wordlist.txt");
+        wordList = readWordListFile(res);
     }
 
     public String nextWord() {
@@ -44,19 +27,20 @@ public class UniqueWordGenerator {
         int number = random.nextInt(wordList.size());
 
         Pair<String, AtomicInteger> pair = wordList.get(number);
-        String word = pair.getFirst() + pair.getSecond().getAndIncrement();
 
-        return word;
+        return pair.getFirst() + "-" + pair.getSecond().getAndIncrement();
     }
 
-    private ArrayList<String> readWordListFile() {
-        ArrayList<String> wordList = new ArrayList<>();
+    private ArrayList<Pair<String, AtomicInteger>> readWordListFile(Resource res) {
+        ArrayList<Pair<String, AtomicInteger>> wordList = new ArrayList<>();
 
-        try {
-            List<String> lines = Files.readAllLines(Paths.get(res.getURI()), StandardCharsets.UTF_8);
-            wordList = new ArrayList<>(lines);
+        try(var reader = new BufferedReader(new InputStreamReader(res.getInputStream()))){
+            String line;
+            while((line = reader.readLine()) != null){
+                wordList.add(Pair.of(line, new AtomicInteger(1)));
+            }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new AssertionError(new RuntimeException("unable to read WordList (this should not happen)", e));
         }
 
         return wordList;
