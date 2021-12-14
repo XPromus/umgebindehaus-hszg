@@ -2,6 +2,7 @@ package de.hszg.umgebindehaus.backend.service;
 
 import de.hszg.umgebindehaus.backend.api.error.ResourceNotFoundException;
 import de.hszg.umgebindehaus.backend.components.UniqueWordGenerator;
+import de.hszg.umgebindehaus.backend.data.model.Scenario;
 import de.hszg.umgebindehaus.backend.data.model.Session;
 import org.springframework.stereotype.Service;
 
@@ -56,5 +57,19 @@ public class SessionService{
     public void editSession(@NotNull String sessionId, @NotNull ScenarioEdit changes){
         final var session = getSessionById(sessionId);
         changes.applyChanges(session);
+    }
+
+    public void loadScenario(@NotNull String sessionId, @NotNull Scenario scenario){
+        final var loadEdit = new ScenarioEdit();
+        loadEdit.setNewTime(scenario.getTime());
+        loadEdit.setNewTimeScale(scenario.getTimeScale());
+        loadEdit.setNewAutomaticTime(scenario.getAutomaticTime());
+        loadEdit.setNewAutomaticWeather(scenario.getAutomaticWeather());
+        final var weather = scenario.getWeather();
+        loadEdit.setNewWeatherWindSpeed(weather.getWindSpeed());
+        loadEdit.setNewWeatherWindDirection(weather.getWindDirection());
+        loadEdit.setNewWeatherCloudiness(weather.getCloudiness());
+
+        editSession(sessionId, loadEdit);
     }
 }

@@ -1,7 +1,10 @@
 package de.hszg.umgebindehaus.backend.api;
 
+import de.hszg.umgebindehaus.backend.api.error.ResourceNotFoundException;
+import de.hszg.umgebindehaus.backend.data.model.Scenario;
 import de.hszg.umgebindehaus.backend.data.model.Session;
 import de.hszg.umgebindehaus.backend.service.ScenarioEdit;
+import de.hszg.umgebindehaus.backend.service.ScenarioService;
 import de.hszg.umgebindehaus.backend.service.SessionService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class SessionController{
 
     private final SessionService sessionService;
+    private final ScenarioService scenarioService;
 
-    public SessionController(SessionService sessionService){
+    public SessionController(SessionService sessionService, ScenarioService scenarioService){
         this.sessionService = sessionService;
+        this.scenarioService = scenarioService;
     }
 
     @GetMapping("/create")
@@ -35,5 +40,14 @@ public class SessionController{
     @PostMapping("/edit/{id}")
     public void editSessionProps(@PathVariable String id, @RequestBody ScenarioEdit edit){
         sessionService.editSession(id, edit);
+    }
+
+    @PutMapping("/loadScenario/{sessionId}")
+    public void loadScenario(@PathVariable String sessionId, @RequestParam Integer scenarioId){
+        var scenarioOptional = scenarioService.getScenarioById(scenarioId);
+        if (scenarioOptional.isEmpty())
+            throw new ResourceNotFoundException(String.format("scenario with id %d does not exist", scenarioId));
+
+        sessionService.loadScenario(sessionId, scenarioOptional.get());
     }
 }
