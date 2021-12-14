@@ -1,6 +1,7 @@
 package de.hszg.umgebindehaus.backend.service;
 
 import de.hszg.umgebindehaus.backend.api.error.ResourceNotFoundException;
+import de.hszg.umgebindehaus.backend.components.UniqueWordGenerator;
 import de.hszg.umgebindehaus.backend.data.model.Session;
 import org.springframework.stereotype.Service;
 
@@ -11,12 +12,26 @@ import java.util.Map;
 @Service
 public class SessionService{
 
+    private final UniqueWordGenerator idGenerator;
+
     private final Map<String, Session> sessions = new HashMap<>();
+
+    public SessionService(UniqueWordGenerator idGenerator){
+        this.idGenerator = idGenerator;
+    }
 
     @NotNull
     public Session createSession(){
         synchronized (sessions){
-            ;
+            String id = idGenerator.nextWord();
+            while(sessions.containsKey(id))// should not happen but just to make sure
+                id = idGenerator.nextWord();
+
+            Session session = new Session();
+            session.setId(id);
+
+            sessions.put(id, session);
+            return session;
         }
     }
 
