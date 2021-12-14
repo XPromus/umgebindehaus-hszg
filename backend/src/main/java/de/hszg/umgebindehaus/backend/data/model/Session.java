@@ -14,7 +14,7 @@ public class Session implements SceneProperties{
     private boolean automaticTime;
 
     public Session(){
-        name = "_undefined_";
+        name = "";
         time = LocalDateTime.now();
         weather = new Weather();
         timeScale = 1.0;
