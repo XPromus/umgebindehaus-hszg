@@ -1,0 +1,11 @@
+crow
+steer
+hamster
+ocelot
+gazelle
+lemur
+badger
+basilisk
+bull
+donkey
+wombat
