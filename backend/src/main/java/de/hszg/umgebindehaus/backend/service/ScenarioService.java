@@ -48,31 +48,7 @@ public class ScenarioService{
         }
 
         final Scenario scenario = optionalScenario.get();
-        if(changes.getNewName() != null){
-            scenario.setName(changes.getNewName());
-        }
-        if(changes.getNewTime() != null){
-            scenario.setTime(changes.getNewTime());
-        }
-        if(changes.getNewTimeScale() != null){
-            scenario.setTimeScale(changes.getNewTimeScale());
-        }
-        if(changes.getNewAutomaticWeather() != null){
-            scenario.setAutomaticWeather(changes.getNewAutomaticWeather());
-        }
-        if(changes.getNewAutomaticTime() != null){
-            scenario.setAutomaticTime(changes.getNewAutomaticTime());
-        }
-        final Weather weather = scenario.getWeather();
-        if(changes.getNewWeatherWindDirection() != null){
-            weather.setWindDirection(changes.getNewWeatherWindDirection());
-        }
-        if(changes.getNewWeatherWindSpeed() != null){
-            weather.setWindSpeed(changes.getNewWeatherWindSpeed());
-        }
-        if(changes.getNewWeatherCloudiness() != null){
-            weather.setCloudiness(changes.getNewWeatherCloudiness());
-        }
+        changes.applyChanges(scenario);
         return scenarioRepo.save(scenario);
     }
 
