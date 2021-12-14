@@ -7,7 +7,7 @@ import org.springframework.lang.Nullable;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-public class ScenarioEdit{// DataTransferObject
+public class ScenePropertiesEdit{// DataTransferObject
 
     private Integer scenarioId;
     private String newName = null;

@@ -1,9 +1,7 @@
 package de.hszg.umgebindehaus.backend.service;
 
 import de.hszg.umgebindehaus.backend.api.error.ResourceNotFoundException;
-import de.hszg.umgebindehaus.backend.components.DefaultScenarios;
 import de.hszg.umgebindehaus.backend.data.model.Scenario;
-import de.hszg.umgebindehaus.backend.data.model.Weather;
 import de.hszg.umgebindehaus.backend.data.repos.ScenarioRepo;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +39,7 @@ public class ScenarioService{
     }
 
     @Transactional
-    public Scenario editScenario(ScenarioEdit changes){
+    public Scenario editScenario(ScenePropertiesEdit changes){
         Optional<Scenario> optionalScenario = getScenarioById(changes.getScenarioId());
         if (optionalScenario.isEmpty()) {
             throw new ResourceNotFoundException("No scenario with the id " + changes.getScenarioId() + " was found.");

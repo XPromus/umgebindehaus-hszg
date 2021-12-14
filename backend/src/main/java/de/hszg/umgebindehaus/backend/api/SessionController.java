@@ -1,14 +1,11 @@
 package de.hszg.umgebindehaus.backend.api;
 
 import de.hszg.umgebindehaus.backend.api.error.ResourceNotFoundException;
-import de.hszg.umgebindehaus.backend.data.model.Scenario;
 import de.hszg.umgebindehaus.backend.data.model.Session;
-import de.hszg.umgebindehaus.backend.service.ScenarioEdit;
+import de.hszg.umgebindehaus.backend.service.ScenePropertiesEdit;
 import de.hszg.umgebindehaus.backend.service.ScenarioService;
 import de.hszg.umgebindehaus.backend.service.SessionService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping ("/session")
@@ -38,7 +35,7 @@ public class SessionController{
     }
 
     @PostMapping("/edit/{id}")
-    public void editSessionProps(@PathVariable String id, @RequestBody ScenarioEdit edit){
+    public void editSessionProps(@PathVariable String id, @RequestBody ScenePropertiesEdit edit){
         sessionService.editSession(id, edit);
     }
 

@@ -54,13 +54,13 @@ public class SessionService{
         }
     }
 
-    public void editSession(@NotNull String sessionId, @NotNull ScenarioEdit changes){
+    public void editSession(@NotNull String sessionId, @NotNull ScenePropertiesEdit changes){
         final var session = getSessionById(sessionId);
         changes.applyChanges(session);
     }
 
     public void loadScenario(@NotNull String sessionId, @NotNull Scenario scenario){
-        final var loadEdit = new ScenarioEdit();
+        final var loadEdit = new ScenePropertiesEdit();
         loadEdit.setNewTime(scenario.getTime());
         loadEdit.setNewTimeScale(scenario.getTimeScale());
         loadEdit.setNewAutomaticTime(scenario.getAutomaticTime());
