@@ -3,7 +3,7 @@ package de.hszg.umgebindehaus.backend.data.model;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-public class Session{
+public class Session implements SceneProperties{
 
     private String id;
     private String name;
@@ -30,48 +30,63 @@ public class Session{
         this.id = id;
     }
 
+    @Override
     @NotNull
     public String getName(){
         return name;
     }
+    @Override
     public void setName(@NotNull String name){
         this.name = name;
     }
 
+    @Override
     @NotNull
     public LocalDateTime getTime(){
         return time;
     }
+    @Override
     public void setTime(@NotNull LocalDateTime time){
         this.time = time;
     }
 
+    @Override
     @NotNull
     public Weather getWeather(){
         return weather;
     }
+    @Override
     public void setWeather(@NotNull Weather weather){
         this.weather = weather;
     }
 
-    public double getTimeScale(){
+    @Override
+    @NotNull
+    public Double getTimeScale(){
         return timeScale;
     }
-    public void setTimeScale(double timeScale){
+    @Override
+    public void setTimeScale(@NotNull Double timeScale){
         this.timeScale = timeScale;
     }
 
-    public boolean isAutomaticWeather(){
+    @Override
+    @NotNull
+    public Boolean getAutomaticWeather(){
         return automaticWeather;
     }
-    public void setAutomaticWeather(boolean automaticWeather){
+    @Override
+    public void setAutomaticWeather(Boolean automaticWeather){
         this.automaticWeather = automaticWeather;
     }
 
-    public boolean isAutomaticTime(){
+    @Override
+    @NotNull
+    public Boolean getAutomaticTime(){
         return automaticTime;
     }
-    public void setAutomaticTime(boolean automaticTime){
+    @Override
+    public void setAutomaticTime(@NotNull Boolean automaticTime){
         this.automaticTime = automaticTime;
     }
 }

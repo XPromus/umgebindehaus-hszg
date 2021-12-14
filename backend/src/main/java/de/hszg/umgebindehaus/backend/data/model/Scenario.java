@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
-public class Scenario{
+public class Scenario implements SceneProperties{
 
     public Scenario(){
         name = "_undefined_";
