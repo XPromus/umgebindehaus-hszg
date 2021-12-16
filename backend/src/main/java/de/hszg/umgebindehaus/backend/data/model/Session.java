@@ -1,90 +1,91 @@
 package de.hszg.umgebindehaus.backend.data.model;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Entity
-public class Scenario implements SceneProperties{
+public class Session implements SceneProperties{
 
-    public Scenario(){
-        name = "_undefined_";
+    private String id;
+    private String name;
+    private LocalDateTime time;
+    private Weather weather;
+    private double timeScale;
+    private boolean automaticWeather;
+    private boolean automaticTime;
+
+    public Session(){
+        name = "";
         time = LocalDateTime.now();
         weather = new Weather();
         timeScale = 1.0;
-        automaticWeather = Boolean.TRUE;
-        automaticTime = Boolean.TRUE;
+        automaticWeather = true;
+        automaticTime = true;
     }
-
-    @Id
-    @GeneratedValue
-    private Integer id;
-    @Column(nullable = false, unique = true)
-    private String name;
-    @Column
-    private LocalDateTime time;//NOTE if this fails, use a converter (to long): https://thorben-janssen.com/persist-localdate-localdatetime-jpa/
-    @Column(nullable = false)
-    @Embedded
-    private Weather weather;
-    @Column(nullable = false)
-    private Double timeScale;
-    @Column(nullable = false)
-    private Boolean automaticWeather;
-    @Column(nullable = false)
-    private Boolean automaticTime;
 
     @NotNull
-    public Integer getId(){
+    public String getId(){
         return id;
     }
-    public void setId(@NotNull Integer id){
+    public void setId(@NotNull String id){
         this.id = id;
     }
 
+    @Override
     @NotNull
     public String getName(){
         return name;
     }
+    @Override
     public void setName(@NotNull String name){
         this.name = name;
     }
 
+    @Override
     @NotNull
     public LocalDateTime getTime(){
         return time;
     }
+    @Override
     public void setTime(@NotNull LocalDateTime time){
         this.time = time;
     }
 
+    @Override
     @NotNull
     public Weather getWeather(){
         return weather;
     }
+    @Override
     public void setWeather(@NotNull Weather weather){
         this.weather = weather;
     }
 
+    @Override
     @NotNull
     public Double getTimeScale(){
         return timeScale;
     }
+    @Override
     public void setTimeScale(@NotNull Double timeScale){
         this.timeScale = timeScale;
     }
 
+    @Override
     @NotNull
     public Boolean getAutomaticWeather(){
         return automaticWeather;
     }
-    public void setAutomaticWeather(@NotNull Boolean automaticWeather){
+    @Override
+    public void setAutomaticWeather(Boolean automaticWeather){
         this.automaticWeather = automaticWeather;
     }
 
+    @Override
     @NotNull
     public Boolean getAutomaticTime(){
         return automaticTime;
     }
+    @Override
     public void setAutomaticTime(@NotNull Boolean automaticTime){
         this.automaticTime = automaticTime;
     }

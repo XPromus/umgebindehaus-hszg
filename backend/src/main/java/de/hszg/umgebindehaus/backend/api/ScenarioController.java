@@ -3,7 +3,7 @@ package de.hszg.umgebindehaus.backend.api;
 
 import de.hszg.umgebindehaus.backend.api.error.ResourceNotFoundException;
 import de.hszg.umgebindehaus.backend.data.model.Scenario;
-import de.hszg.umgebindehaus.backend.service.ScenarioEdit;
+import de.hszg.umgebindehaus.backend.service.ScenePropertiesEdit;
 import de.hszg.umgebindehaus.backend.service.ScenarioService;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
@@ -60,7 +60,7 @@ public class ScenarioController {
     }
 
     @PostMapping("/edit")
-    public Scenario editScenario(@RequestBody ScenarioEdit changes) {
+    public Scenario editScenario(@RequestBody ScenePropertiesEdit changes) {
         return scenarioService.editScenario(changes);
     }
 
