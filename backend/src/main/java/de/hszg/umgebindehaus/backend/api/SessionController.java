@@ -36,15 +36,18 @@ public class SessionController{
 
     @PostMapping("/edit/{id}")
     public void editSessionProps(@PathVariable String id, @RequestBody ScenePropertiesEdit edit){
-        sessionService.editSession(id, edit);
+        final Session session = sessionService.getSessionById(id);
+        sessionService.editSession(session, edit);
     }
 
     @PutMapping("/loadScenario/{sessionId}")
     public void loadScenario(@PathVariable String sessionId, @RequestParam Integer scenarioId){
+        final Session session = sessionService.getSessionById(sessionId);
+
         var scenarioOptional = scenarioService.getScenarioById(scenarioId);
         if (scenarioOptional.isEmpty())
             throw new ResourceNotFoundException(String.format("scenario with id %d does not exist", scenarioId));
 
-        sessionService.loadScenario(sessionId, scenarioOptional.get());
+        sessionService.loadScenario(session, scenarioOptional.get());
     }
 }

@@ -52,12 +52,11 @@ public class SessionService{
         sessions.remove(id);
     }
 
-    public void editSession(@NotNull String sessionId, @NotNull ScenePropertiesEdit changes){
-        final var session = getSessionById(sessionId);
+    public void editSession(@NotNull Session session, @NotNull ScenePropertiesEdit changes){
         changes.applyChanges(session);
     }
 
-    public void loadScenario(@NotNull String sessionId, @NotNull Scenario scenario){
+    public void loadScenario(@NotNull Session session, @NotNull Scenario scenario){
         final var loadEdit = new ScenePropertiesEdit();
         loadEdit.setNewTime(scenario.getTime());
         loadEdit.setNewTimeScale(scenario.getTimeScale());
@@ -68,6 +67,6 @@ public class SessionService{
         loadEdit.setNewWeatherWindDirection(weather.getWindDirection());
         loadEdit.setNewWeatherCloudiness(weather.getCloudiness());
 
-        editSession(sessionId, loadEdit);
+        editSession(session, loadEdit);
     }
 }
