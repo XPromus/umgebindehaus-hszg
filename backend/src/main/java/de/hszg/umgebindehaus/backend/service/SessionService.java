@@ -8,17 +8,20 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class SessionService{
 
     private final UniqueWordGenerator idGenerator;
+    private final ScenarioService scenarioService;
 
     private final Map<String, Session> sessions;
 
-    public SessionService(UniqueWordGenerator idGenerator){
+    public SessionService(UniqueWordGenerator idGenerator, ScenarioService scenarioService){
         this.idGenerator = idGenerator;
+        this.scenarioService = scenarioService;
 
         sessions = new ConcurrentHashMap<>();
     }
@@ -68,5 +71,44 @@ public class SessionService{
         loadEdit.setNewWeatherCloudiness(weather.getCloudiness());
 
         editSession(session, loadEdit);
+    }
+
+    /**
+     * saves the session to a scenario; ony the fields in filter are stored
+     * @param src the session to save
+     * @param dest the scenario to store the properties to
+     * @param filter set of fields to save; valid values are:
+     *               Time, TimeScale, AutomaticWeather, AutomaticTime, WeatherWindDirection, WeatherWindSpeed, WeatherCloudiness
+     */
+    public void saveSession(@NotNull Session src, @NotNull Scenario dest, @NotNull Set<String> filter){
+        final var edit = new ScenePropertiesEdit();
+
+        filter.forEach(prop -> {
+            switch(prop){
+                case "Time":
+                    edit.setNewTime(src.getTime());
+                    break;
+                case "TimeScale":
+                    edit.setNewTimeScale(src.getTimeScale());
+                    break;
+                case "AutomaticWeather":
+                    edit.setNewAutomaticWeather(src.getAutomaticWeather());
+                    break;
+                case "AutomaticTime":
+                    edit.setNewAutomaticTime(src.getAutomaticTime());
+                    break;
+                case "WeatherWindDirection":
+                    edit.setNewWeatherWindDirection(src.getWeather().getWindDirection());
+                    break;
+                case "WeatherWindSpeed":
+                    edit.setNewWeatherWindSpeed(src.getWeather().getWindSpeed());
+                    break;
+                case "WeatherCloudiness":
+                    edit.setNewWeatherCloudiness(src.getWeather().getCloudiness());
+                    break;
+            }
+        });
+
+        scenarioService.editScenario(dest, edit);
     }
 }
