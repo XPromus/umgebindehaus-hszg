@@ -6,6 +6,7 @@ import de.hszg.umgebindehaus.backend.data.repos.ScenarioRepo;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,13 +40,7 @@ public class ScenarioService{
     }
 
     @Transactional
-    public Scenario editScenario(ScenePropertiesEdit changes){
-        Optional<Scenario> optionalScenario = getScenarioById(changes.getScenarioId());
-        if (optionalScenario.isEmpty()) {
-            throw new ResourceNotFoundException("No scenario with the id " + changes.getScenarioId() + " was found.");
-        }
-
-        final Scenario scenario = optionalScenario.get();
+    public Scenario editScenario(@NotNull Scenario scenario, @NotNull ScenePropertiesEdit changes){
         changes.applyChanges(scenario);
         return scenarioRepo.save(scenario);
     }

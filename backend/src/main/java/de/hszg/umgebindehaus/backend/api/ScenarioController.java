@@ -59,9 +59,14 @@ public class ScenarioController {
         }
     }
 
-    @PostMapping("/edit")
-    public Scenario editScenario(@RequestBody ScenePropertiesEdit changes) {
-        return scenarioService.editScenario(changes);
+    @PostMapping("/edit/{id}")
+    public Scenario editScenario(@PathVariable Integer id, @RequestBody ScenePropertiesEdit changes) {
+        final Optional<Scenario> scenario = scenarioService.getScenarioById(id);
+        if (scenario.isEmpty()) {
+            throw new ResourceNotFoundException("No scenario with the id " + id + " was found.");
+        }
+
+        return scenarioService.editScenario(scenario.get(), changes);
     }
 
 }

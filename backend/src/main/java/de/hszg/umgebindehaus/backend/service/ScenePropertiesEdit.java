@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 
 public class ScenePropertiesEdit{// DataTransferObject
 
-    private Integer scenarioId;
     private String newName = null;
     private LocalDateTime newTime = null;
     private Double newTimeScale = null;
@@ -19,14 +18,6 @@ public class ScenePropertiesEdit{// DataTransferObject
     private Double newWeatherWindDirection = null;
     private Double newWeatherWindSpeed = null;
     private Weather.CloudType newWeatherCloudiness = null;
-
-    @Nullable
-    public Integer getScenarioId(){
-        return scenarioId;
-    }
-    public void setScenarioId(@Nullable Integer scenarioId){
-        this.scenarioId = scenarioId;
-    }
 
     @Nullable
     public String getNewName(){
