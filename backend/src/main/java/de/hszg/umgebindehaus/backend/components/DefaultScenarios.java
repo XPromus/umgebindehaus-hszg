@@ -55,14 +55,13 @@ public class DefaultScenarios{
             Scenario newS2 = scenarioService.createScenario(s2Name);
 
             final ScenePropertiesEdit initEdit = new ScenePropertiesEdit();
-            initEdit.setScenarioId(newS2.getId());
             initEdit.setNewTime(LocalDateTime.of(2021, 6, 20, 13, 0, 0));
             initEdit.setNewTimeScale(5.0);
             initEdit.setNewAutomaticWeather(Boolean.FALSE);
             initEdit.setNewWeatherWindDirection(12.0);
             initEdit.setNewWeatherWindDirection(2.5);
             initEdit.setNewWeatherCloudiness(Weather.CloudType.CLOUDY_1);
-            newS2 = scenarioService.editScenario(initEdit);
+            newS2 = scenarioService.editScenario(newS2, initEdit);
 
             return newS2;
         });
