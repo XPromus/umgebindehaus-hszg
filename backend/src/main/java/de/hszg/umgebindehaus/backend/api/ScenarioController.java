@@ -3,7 +3,7 @@ package de.hszg.umgebindehaus.backend.api;
 
 import de.hszg.umgebindehaus.backend.api.error.ResourceNotFoundException;
 import de.hszg.umgebindehaus.backend.data.model.Scenario;
-import de.hszg.umgebindehaus.backend.service.ScenarioEdit;
+import de.hszg.umgebindehaus.backend.service.ScenePropertiesEdit;
 import de.hszg.umgebindehaus.backend.service.ScenarioService;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
@@ -59,9 +59,14 @@ public class ScenarioController {
         }
     }
 
-    @PostMapping("/edit")
-    public Scenario editScenario(@RequestBody ScenarioEdit changes) {
-        return scenarioService.editScenario(changes);
+    @PostMapping("/edit/{id}")
+    public Scenario editScenario(@PathVariable Integer id, @RequestBody ScenePropertiesEdit changes) {
+        final Optional<Scenario> scenario = scenarioService.getScenarioById(id);
+        if (scenario.isEmpty()) {
+            throw new ResourceNotFoundException("No scenario with the id " + id + " was found.");
+        }
+
+        return scenarioService.editScenario(scenario.get(), changes);
     }
 
 }
