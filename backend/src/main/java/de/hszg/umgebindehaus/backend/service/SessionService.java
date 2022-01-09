@@ -35,8 +35,14 @@ public class SessionService{
     public Session createSession(){
         synchronized (sessions){// this should still be full synchronized to ensure unique keys
             String id = idGenerator.nextWord();
-            while(sessions.getIfPresent(id) != null)// should not happen but just to make sure
+            while(sessions.getIfPresent(id) != null) {// should not happen but just to make sure
                 id = idGenerator.nextWord();
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
 
             Session session = new Session();
             session.setId(id);
