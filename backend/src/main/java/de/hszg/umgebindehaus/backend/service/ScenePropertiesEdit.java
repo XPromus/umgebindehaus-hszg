@@ -1,13 +1,14 @@
 package de.hszg.umgebindehaus.backend.service;
 
+import de.hszg.umgebindehaus.backend.data.model.SceneProperties;
 import de.hszg.umgebindehaus.backend.data.model.Weather;
 import org.springframework.lang.Nullable;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-public class ScenarioEdit{// DataTransferObject
+public class ScenePropertiesEdit{// DataTransferObject
 
-    private Integer scenarioId;
     private String newName = null;
     private LocalDateTime newTime = null;
     private Double newTimeScale = null;
@@ -17,14 +18,6 @@ public class ScenarioEdit{// DataTransferObject
     private Double newWeatherWindDirection = null;
     private Double newWeatherWindSpeed = null;
     private Weather.CloudType newWeatherCloudiness = null;
-
-    @Nullable
-    public Integer getScenarioId(){
-        return scenarioId;
-    }
-    public void setScenarioId(@Nullable Integer scenarioId){
-        this.scenarioId = scenarioId;
-    }
 
     @Nullable
     public String getNewName(){
@@ -88,5 +81,33 @@ public class ScenarioEdit{// DataTransferObject
     }
     public void setNewWeatherCloudiness(@Nullable Weather.CloudType newWeatherCloudiness){
         this.newWeatherCloudiness = newWeatherCloudiness;
+    }
+    
+    public void applyChanges(@NotNull final SceneProperties target){
+        if(this.getNewName() != null){
+            target.setName(this.getNewName());
+        }
+        if(this.getNewTime() != null){
+            target.setTime(this.getNewTime());
+        }
+        if(this.getNewTimeScale() != null){
+            target.setTimeScale(this.getNewTimeScale());
+        }
+        if(this.getNewAutomaticWeather() != null){
+            target.setAutomaticWeather(this.getNewAutomaticWeather());
+        }
+        if(this.getNewAutomaticTime() != null){
+            target.setAutomaticTime(this.getNewAutomaticTime());
+        }
+        final Weather weather = target.getWeather();
+        if(this.getNewWeatherWindDirection() != null){
+            weather.setWindDirection(this.getNewWeatherWindDirection());
+        }
+        if(this.getNewWeatherWindSpeed() != null){
+            weather.setWindSpeed(this.getNewWeatherWindSpeed());
+        }
+        if(this.getNewWeatherCloudiness() != null){
+            weather.setCloudiness(this.getNewWeatherCloudiness());
+        }
     }
 }

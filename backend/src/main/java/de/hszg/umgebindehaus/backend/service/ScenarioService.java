@@ -1,13 +1,12 @@
 package de.hszg.umgebindehaus.backend.service;
 
 import de.hszg.umgebindehaus.backend.api.error.ResourceNotFoundException;
-import de.hszg.umgebindehaus.backend.components.DefaultScenarios;
 import de.hszg.umgebindehaus.backend.data.model.Scenario;
-import de.hszg.umgebindehaus.backend.data.model.Weather;
 import de.hszg.umgebindehaus.backend.data.repos.ScenarioRepo;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,38 +40,8 @@ public class ScenarioService{
     }
 
     @Transactional
-    public Scenario editScenario(ScenarioEdit changes){
-        Optional<Scenario> optionalScenario = getScenarioById(changes.getScenarioId());
-        if (optionalScenario.isEmpty()) {
-            throw new ResourceNotFoundException("No scenario with the id " + changes.getScenarioId() + " was found.");
-        }
-
-        final Scenario scenario = optionalScenario.get();
-        if(changes.getNewName() != null){
-            scenario.setName(changes.getNewName());
-        }
-        if(changes.getNewTime() != null){
-            scenario.setTime(changes.getNewTime());
-        }
-        if(changes.getNewTimeScale() != null){
-            scenario.setTimeScale(changes.getNewTimeScale());
-        }
-        if(changes.getNewAutomaticWeather() != null){
-            scenario.setAutomaticWeather(changes.getNewAutomaticWeather());
-        }
-        if(changes.getNewAutomaticTime() != null){
-            scenario.setAutomaticTime(changes.getNewAutomaticTime());
-        }
-        final Weather weather = scenario.getWeather();
-        if(changes.getNewWeatherWindDirection() != null){
-            weather.setWindDirection(changes.getNewWeatherWindDirection());
-        }
-        if(changes.getNewWeatherWindSpeed() != null){
-            weather.setWindSpeed(changes.getNewWeatherWindSpeed());
-        }
-        if(changes.getNewWeatherCloudiness() != null){
-            weather.setCloudiness(changes.getNewWeatherCloudiness());
-        }
+    public Scenario editScenario(@NotNull Scenario scenario, @NotNull ScenePropertiesEdit changes){
+        changes.applyChanges(scenario);
         return scenarioRepo.save(scenario);
     }
 

@@ -36,8 +36,9 @@ public class ScenarioControllerTest extends AbstractTestNGSpringContextTests {
 
         RestAssured.port = 8080;
 
+        final String id = "3";
+
         var changes = "{" +
-                "\"scenarioId\":3," +
                 "\"newName\":\"New Name\"," +
                 "\"newTime\":\"2020-07-30T10:15:30\"," +
                 "\"newTimeScale\":2.0," +
@@ -49,7 +50,7 @@ public class ScenarioControllerTest extends AbstractTestNGSpringContextTests {
                 "}";
 
         var expectedBody = "{" +
-                "\"id\":3," +
+                "\"id\":" + id + "," +
                 "\"name\":\"New Name\"," +
                 "\"time\":\"2020-07-30T10:15:30\"," +
                 "\"weather\":{\"windDirection\":20.0,\"windSpeed\":5.0,\"cloudiness\":\"CLEAR\"}," +
@@ -69,7 +70,7 @@ public class ScenarioControllerTest extends AbstractTestNGSpringContextTests {
                 .contentType(ContentType.JSON)
                 .body(changes)
                 .when()
-                .post("/scenario/edit");
+                .post("/scenario/edit/" + id);
 
         response.then().statusCode(200);
         Assert.assertEquals(response.body().print(), expectedBody);

@@ -2,7 +2,7 @@ package de.hszg.umgebindehaus.backend.components;
 
 import de.hszg.umgebindehaus.backend.data.model.Scenario;
 import de.hszg.umgebindehaus.backend.data.model.Weather;
-import de.hszg.umgebindehaus.backend.service.ScenarioEdit;
+import de.hszg.umgebindehaus.backend.service.ScenePropertiesEdit;
 import de.hszg.umgebindehaus.backend.service.ScenarioService;
 import org.springframework.stereotype.Component;
 
@@ -54,15 +54,14 @@ public class DefaultScenarios{
         final Scenario s2 = existingS2.orElseGet(() -> {
             Scenario newS2 = scenarioService.createScenario(s2Name);
 
-            final ScenarioEdit initEdit = new ScenarioEdit();
-            initEdit.setScenarioId(newS2.getId());
+            final ScenePropertiesEdit initEdit = new ScenePropertiesEdit();
             initEdit.setNewTime(LocalDateTime.of(2021, 6, 20, 13, 0, 0));
             initEdit.setNewTimeScale(5.0);
             initEdit.setNewAutomaticWeather(Boolean.FALSE);
             initEdit.setNewWeatherWindDirection(12.0);
             initEdit.setNewWeatherWindDirection(2.5);
             initEdit.setNewWeatherCloudiness(Weather.CloudType.CLOUDY_1);
-            newS2 = scenarioService.editScenario(initEdit);
+            newS2 = scenarioService.editScenario(newS2, initEdit);
 
             return newS2;
         });

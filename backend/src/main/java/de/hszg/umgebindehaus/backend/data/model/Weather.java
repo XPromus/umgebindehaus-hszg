@@ -1,6 +1,7 @@
 package de.hszg.umgebindehaus.backend.data.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 
 @Embeddable
