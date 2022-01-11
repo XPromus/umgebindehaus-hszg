@@ -6,6 +6,11 @@
   margin-top: 30%;
 }
 
+.scenario-header{
+  margin: 12px;
+
+}
+
 .session-ID-input{
   border-top-left-radius: 3rem !important;
   border-bottom-left-radius: 3rem !important;

@@ -4,16 +4,13 @@ import {
     Card,
     CardTitle,
     Col,
-    Container,
-    Dropdown, DropdownItem, DropdownMenu,
-    DropdownToggle,
     Form,
     FormGroup,
     Input,
     Label
 } from "reactstrap";
 import React, {useState} from "react";
-import {callCreateSzenario, callDeleteSzenario, SzenarioResponse} from "../rest/szenarioCalls";
+import {callDeleteSzenario, SzenarioResponse} from "../rest/szenarioCalls";
 import {callEditSzenario} from "../rest/szenarioCalls";
 
 export const EditSzenarioForm = () => {

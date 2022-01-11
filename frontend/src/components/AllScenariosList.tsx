@@ -1,4 +1,4 @@
-import {Container, Row, Col, Card, CardBody, CardTitle, CardText, Button} from "reactstrap";
+import {Container, Row, Col, Card, CardBody, CardTitle, CardText, Button, List} from "reactstrap";
 import {useEffect, useState} from "react";
 import {callScenarioAll, SzenarioResponse} from "../rest/szenarioCalls";
 
@@ -26,7 +26,27 @@ export const AllScenariosList = () => {
                             <Card>
                                 <CardBody>
                                     <CardTitle>{e.name}</CardTitle>
-                                    <CardText>blablabla</CardText>
+                                    <CardText>
+                                        <List>
+                                            <li>
+                                                Zeit: {e.time}
+                                            </li>
+                                            <li>
+                                                Windrichtung: {e.weather.windDirection}
+                                            </li>
+                                            <li>
+                                                Windgeschwindigkeit: {e.weather.windSpeed}
+                                            </li>
+                                            <li>
+                                                Wetter: {e.weather.cloudiness}
+                                            </li>
+                                            <li>
+                                                Zeitraffer: {e.timeScale}
+                                            </li>
+                                        </List>
+
+                                    </CardText>
+
                                     <Button>Bearbeiten</Button>
                                 </CardBody>
                             </Card>
