@@ -7,6 +7,8 @@ import de.hszg.umgebindehaus.backend.service.ScenarioService;
 import de.hszg.umgebindehaus.backend.service.SessionService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 @RestController
 @RequestMapping ("/session")
 public class SessionController{
@@ -49,5 +51,18 @@ public class SessionController{
             throw new ResourceNotFoundException(String.format("scenario with id %d does not exist", scenarioId));
 
         sessionService.loadScenario(session, scenarioOptional.get());
+    }
+
+    @PutMapping("/storeScenario/{sessionId}")
+    public void storeScenario(@PathVariable String sessionId, @RequestParam Integer scenarioId, @RequestParam String filter){
+        final Session session = sessionService.getSessionById(sessionId);
+
+        final var filterSet = Set.of(filter.split(","));
+
+        var scenarioOptional = scenarioService.getScenarioById(scenarioId);
+        if (scenarioOptional.isEmpty())
+            throw new ResourceNotFoundException(String.format("scenario with id %d does not exist", scenarioId));
+
+        sessionService.saveSession(session, scenarioOptional.get(), filterSet);
     }
 }
