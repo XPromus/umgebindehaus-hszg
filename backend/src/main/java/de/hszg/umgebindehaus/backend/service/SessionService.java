@@ -1,5 +1,7 @@
 package de.hszg.umgebindehaus.backend.service;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import de.hszg.umgebindehaus.backend.api.error.ResourceNotFoundException;
 import de.hszg.umgebindehaus.backend.components.UniqueWordGenerator;
 import de.hszg.umgebindehaus.backend.data.model.Scenario;
@@ -10,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class SessionService{
@@ -17,21 +20,29 @@ public class SessionService{
     private final UniqueWordGenerator idGenerator;
     private final ScenarioService scenarioService;
 
-    private final Map<String, Session> sessions;
+    private final Cache<String, Session> sessions;
 
     public SessionService(UniqueWordGenerator idGenerator, ScenarioService scenarioService){
         this.idGenerator = idGenerator;
         this.scenarioService = scenarioService;
 
-        sessions = new ConcurrentHashMap<>();
+        sessions = Caffeine.newBuilder()
+                .expireAfterAccess(1, TimeUnit.DAYS)
+                .build();
     }
 
     @NotNull
     public Session createSession(){
         synchronized (sessions){// this should still be full synchronized to ensure unique keys
             String id = idGenerator.nextWord();
-            while(sessions.containsKey(id))// should not happen but just to make sure
+            while(sessions.getIfPresent(id) != null) {// should not happen but just to make sure
                 id = idGenerator.nextWord();
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
 
             Session session = new Session();
             session.setId(id);
@@ -43,16 +54,17 @@ public class SessionService{
 
     @NotNull
     public Session getSessionById(@NotNull String id){
-        var session = sessions.get(id);
-        if(session == null)
+        var session = sessions.get(id, e -> {
             throw new ResourceNotFoundException(String.format("no session with id %s registered", id));
+        });
         return session;
     }
 
     public void removeSession(@NotNull String id){
-        if(!sessions.containsKey(id))
+        sessions.get(id, e -> {
             throw new ResourceNotFoundException(String.format("no session with id %s registered", id));
-        sessions.remove(id);
+        });
+        sessions.invalidate(id);
     }
 
     public void editSession(@NotNull Session session, @NotNull ScenePropertiesEdit changes){
