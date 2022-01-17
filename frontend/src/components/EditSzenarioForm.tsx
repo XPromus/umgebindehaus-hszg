@@ -67,6 +67,33 @@ export const EditSzenarioForm = () => {
                 setEditSzenarioFailed(true)
             })
     }
+
+    function convertCloudiness(value: string) {
+        switch(value) {
+            case "Regen": {
+                setWeatherCloudiness("RAIN")
+                break;
+            }
+            case "Klar": {
+                setWeatherCloudiness("CLEAR")
+                break;
+            }
+            case "Wolkig 1": {
+                setWeatherCloudiness("CLOUDY_1")
+                break;
+            }
+            case "Wolkig 2": {
+                setWeatherCloudiness("CLOUDY_2")
+                break;
+            }
+            default: {
+                //statements;
+                break;
+            }
+        }
+        return undefined;
+    }
+
     return (
 
         <div className="input-form" id="input-form-content">
@@ -182,13 +209,14 @@ export const EditSzenarioForm = () => {
                             Cloudiness
                         </Label>
                         <Col sm={10}>
-                            <Input
-                                onChange={(e: any) => setWeatherCloudiness(e.target.value)}
-                                name="cloudiness"
-                                placeholder="Wie bewölkt soll es denn sein?"
-                                type="text"
-                            />
+                            <Input type="select" name="cloudiness" onChange={(e: any ) => convertCloudiness(e.target.value)} >
+                                <option>Klar</option>
+                                <option>Wolkig 1</option>
+                                <option>Wolkig 2</option>
+                                <option>Regen</option>
+                            </Input>
                         </Col>
+
                     </FormGroup>
                     <FormGroup row>
                         <Label
@@ -279,9 +307,14 @@ export const EditSzenarioForm = () => {
                         Löschen fehlgeschlagen
                     </Alert>
                 )}
-                {
-                    editSzenario
-                }
+                <pre>
+                    <code>
+                        {
+                            JSON.stringify(editSzenario, null, 2)
+                        }
+                    </code>
+                </pre>
+
 
             </Card>
 

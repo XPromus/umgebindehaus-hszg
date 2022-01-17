@@ -38,7 +38,7 @@ function App() {
                     Alle Szenarios
                 </Button>
 
-                <AllScenariosList/>
+                {/*<AllScenariosList/>*/}
 
                 <div className="input-id-content" id="input-id-content">
                     <InputGroup>
@@ -51,6 +51,7 @@ function App() {
                 <EditSzenarioForm/>
 
             </Container>
+
         </div>
     );
 }
