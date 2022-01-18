@@ -23,7 +23,4 @@ services:
       - ugh-lan
     ports:
       - "8080:8080"
-    command:
-      - "java"
-      - "-jar"
-      - "server.jar"
+    command: "sh -c 'sleep 30; java -jar server.jar'"# wait until db comes online
