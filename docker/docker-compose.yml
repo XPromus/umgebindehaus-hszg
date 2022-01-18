@@ -1,0 +1,33 @@
+version: "3.9"
+
+networks:
+  ugh-lan:
+    driver: bridge
+
+services:
+  ugh-db:
+    build:
+      context: .
+      dockerfile: db.dockerfile
+    volumes:
+      - "./files/db-data:/var/lib/mysql"
+    networks:
+      - ugh-lan
+    command:
+      - "mariadbd"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+
+  ugh-server:
+    image: "adoptopenjdk/openjdk11"
+    volumes:
+      - "./files/server-data:/files"
+    working_dir: "/files"
+    networks:
+      - ugh-lan
+    ports:
+      - "8080:8080"
+    command:
+      - "java"
+      - "-jar"
+      - "server.jar"
