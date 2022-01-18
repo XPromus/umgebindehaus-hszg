@@ -1,6 +1,7 @@
 import {Container, Row, Col, Card, CardBody, CardTitle, CardText, Button, List} from "reactstrap";
 import {useEffect, useState} from "react";
 import {callScenarioAll, SzenarioResponse} from "../rest/szenarioCalls";
+import {CreateSzenarioForm} from "./CreateSzenarioForm";
 
 export const AllScenariosList = () => {
    const [scenarios, setScenarios] = useState<SzenarioResponse[]>([]);
@@ -53,6 +54,9 @@ export const AllScenariosList = () => {
                         </Col>
                         )
                     })}
+                    <Col>
+                        <CreateSzenarioForm/>
+                    </Col>
                 </Row>
             </Container>
         </div>
