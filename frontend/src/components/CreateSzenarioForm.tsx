@@ -23,7 +23,7 @@ export const CreateSzenarioForm = () => {
         // FIXME: handling
     }
     return (
-        <div>
+        <Card>
             <Card body>
                 <CardTitle tag="h5" className="card-title">
                     Szenario erstellen
@@ -34,21 +34,13 @@ export const CreateSzenarioForm = () => {
                     )
                 }
                 <Form>
-                    <FormGroup row>
-                        <Label
-                            for="nameScenario"
-                            sm={2}
-                        >
-                            Name
-                        </Label>
-                        <Col sm={10}>
+                    <FormGroup>
                             <Input
                                 onChange={(e: any) => setName(e.target.value)}
                                 name="name"
                                 placeholder="Name deines Scenarios"
                                 type="text"
                             />
-                        </Col>
                     </FormGroup>
                     <Button onClick={onSubmit} color="success">
                         speichern
@@ -65,6 +57,6 @@ export const CreateSzenarioForm = () => {
                     )
                 }
             </Card>
-        </div>
+        </Card>
     )
 }

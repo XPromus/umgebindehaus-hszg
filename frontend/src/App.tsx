@@ -24,21 +24,13 @@ function showForm() {
     document.getElementById("input-id-content").style["animation-fill-mode"] = "forwards";
 }
 
-/*function showList(){
-
-}*/
-
 function App() {
     return (
         <div className="App">
             <Container>
                 <CreateSzenarioForm/>
-
-                <Button color="primary" className="all-scenarios-button">
-                    Alle Szenarios
-                </Button>
-
-                {/*<AllScenariosList/>*/}
+                <h3 className="scenario-header">Alle Szenarios</h3>
+                <AllScenariosList/>
 
                 <div className="input-id-content" id="input-id-content">
                     <InputGroup>
