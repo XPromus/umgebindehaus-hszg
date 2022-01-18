@@ -149,6 +149,12 @@ public class SessionControllerTest extends AbstractTestNGSpringContextTests {
 
         deleteResponse.then().statusCode(200);
 
+        var getResponse = RestAssured.given()
+                .when()
+                .get("/session/get/" + sessionID);
+
+        getResponse.then().statusCode(404);
+
     }
 
 }
