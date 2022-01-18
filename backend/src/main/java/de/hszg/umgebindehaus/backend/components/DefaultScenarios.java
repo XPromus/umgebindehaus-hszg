@@ -1,28 +1,33 @@
 package de.hszg.umgebindehaus.backend.components;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.hszg.umgebindehaus.backend.data.model.Scenario;
 import de.hszg.umgebindehaus.backend.data.model.Weather;
-import de.hszg.umgebindehaus.backend.service.ScenePropertiesEdit;
-import de.hszg.umgebindehaus.backend.service.ScenarioService;
+import de.hszg.umgebindehaus.backend.data.repos.ScenarioRepo;
+import io.swagger.v3.core.util.Json;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.io.IOError;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Optional;
+import java.util.List;
 import java.util.Set;
 
-@SuppressWarnings("MagicNumber")
 @Component
 public class DefaultScenarios{
 
-    public DefaultScenarios(ScenarioService scenarioService){
-        this.scenarioService = scenarioService;
+    private static final String FILE_NAME = "defaultScenarios.json";
+
+    public DefaultScenarios(ScenarioRepo scenarioRepo){
+        this.scenarioRepo = scenarioRepo;
 
         initDefaults();
     }
 
-    private final ScenarioService scenarioService;
+    private final ScenarioRepo scenarioRepo;
 
     private Weather defaultWeather;
     private Scenario defaultScenario;
@@ -39,34 +44,36 @@ public class DefaultScenarios{
     }
 
     private void initDefaults(){
-        defaultWeather = new Weather();
+        final var res = new ClassPathResource(FILE_NAME);
+        try(final var reader = new InputStreamReader(res.getInputStream())){
+            defaultWeather = new Weather();
 
-        final Set<Scenario> set = new HashSet<>();
+            final ObjectMapper deserializer = Json.mapper();
+            final DataHolder data = deserializer.readValue(reader, DataHolder.class);
 
-        final String s1Name = "Example 1";
-        final Optional<Scenario> existingS1 = scenarioService.getScenarioByName(s1Name);
-        final Scenario s1 = existingS1.orElseGet(() -> scenarioService.createScenario(s1Name));
-        set.add(s1);
-        defaultScenario = s1;
+            assert data.defaultWeather != null;
+            assert data.defaultScenarios != null;
+            assert data.defaultScenarios.size() > 0;
 
-        final String s2Name = "Example 2";
-        final Optional<Scenario> existingS2 = scenarioService.getScenarioByName(s2Name);
-        final Scenario s2 = existingS2.orElseGet(() -> {
-            Scenario newS2 = scenarioService.createScenario(s2Name);
+            final var scenarios = new HashSet<Scenario>(data.defaultScenarios.size());
+            Scenario firstScenario = null;
+            for(final Scenario s : data.defaultScenarios){
+                final var storedScenario = scenarioRepo.findByName(s.getName()).orElseGet(() -> scenarioRepo.save(s));
+                scenarios.add(storedScenario);
+                if(firstScenario == null)
+                    firstScenario = storedScenario;
+            }
 
-            final ScenePropertiesEdit initEdit = new ScenePropertiesEdit();
-            initEdit.setNewTime(LocalDateTime.of(2021, 6, 20, 13, 0, 0));
-            initEdit.setNewTimeScale(5.0);
-            initEdit.setNewAutomaticWeather(Boolean.FALSE);
-            initEdit.setNewWeatherWindDirection(12.0);
-            initEdit.setNewWeatherWindDirection(2.5);
-            initEdit.setNewWeatherCloudiness(Weather.CloudType.CLOUDY_1);
-            newS2 = scenarioService.editScenario(newS2, initEdit);
+            defaultWeather = data.defaultWeather;
+            defaultScenario = firstScenario;
+            defaultScenarios = Collections.unmodifiableSet(scenarios);
+        } catch (IOException e) {
+            throw new IOError(e);
+        }
+    }
 
-            return newS2;
-        });
-        set.add(s2);
-
-        defaultScenarios = Collections.unmodifiableSet(set);
+    private static final class DataHolder{
+        public Weather defaultWeather;
+        public List<Scenario> defaultScenarios;
     }
 }
