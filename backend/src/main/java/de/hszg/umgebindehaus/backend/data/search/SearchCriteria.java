@@ -4,11 +4,24 @@ public class SearchCriteria {
     private String key;
     private String operation;
     private Object value;
+    private boolean orPredicate;
 
-    public SearchCriteria(String key, String operation, String value) {
+    public SearchCriteria() {
+
+    }
+
+    public SearchCriteria(final String key, final String operation, final Object value) {
+        super();
         this.key = key;
         this.operation = operation;
         this.value = value;
+    }
+
+    public SearchCriteria(final String orPredicate, final String key, final String operation, final Object value) {
+        super();
+
+        //TODO: this
+
     }
 
     public String getKey() {
@@ -21,6 +34,10 @@ public class SearchCriteria {
 
     public Object getValue() {
         return value;
+    }
+
+    public boolean isOrPredicate() {
+        return orPredicate;
     }
 
 }
