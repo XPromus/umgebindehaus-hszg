@@ -1,32 +1,21 @@
-import {
-    Alert,
-    Button,
-    Card,
-    CardTitle,
-    Col,
-    Container,
-    Dropdown, DropdownItem, DropdownMenu,
-    DropdownToggle,
-    Form,
-    FormGroup,
-    Input,
-    Label
-} from "reactstrap";
+import {Alert, Button, Card, CardTitle, Col, Form, FormGroup, Input, Label} from "reactstrap";
 import React, {useState} from "react";
-import {callCreateSzenario, callDeleteSzenario, SzenarioResponse} from "../rest/szenarioCalls";
-import {callEditSzenario} from "../rest/szenarioCalls";
+import {callDeleteSzenario, callEditSzenario, SzenarioResponse} from "../rest/szenarioCalls";
+import moment from "moment";
+
 
 export const EditSzenarioForm = () => {
     const [id, setId] = useState<number>(1);
     const [name, setName] = useState<string>("");
     const [time, setTime] = useState<number>(1);
-   // const [weather, setWeather] = useState<string>("");
     const [timeScale, setTimeScale] = useState<number>(1);
     const [automaticWeather, setAutomaticWeather] = useState<boolean>(false);
     const [automaticTime, setAutomaticTime] = useState<boolean>(false);
     const [weatherWindDirection, setWeatherWindDirection] = useState<number>(1);
     const [weatherWindSpeed, setWeatherWindSpeed] = useState<number>(1);
     const [weatherCloudiness, setWeatherCloudiness] = useState<string>("");
+
+    const now = moment();
 
     function printConsole() {
         const formValues = {name, time, timeScale, automaticWeather, automaticTime}
@@ -56,8 +45,8 @@ export const EditSzenarioForm = () => {
     const [editSzenarioFailed, setEditSzenarioFailed] = useState<boolean>(false);
 
     const onSave = () => {
-        console.log("id: ", id, "name: ", name, "time: ", time,  "weatherWindDirection: ", weatherWindDirection, "weatherWindSpeed: ", weatherWindSpeed, "weatherCloudiness: ", weatherCloudiness, "timeScale: ", timeScale, "automaticWeather: ", automaticWeather, "automaticTime: ", automaticTime);
-        callEditSzenario(id, name, time, timeScale, automaticWeather, automaticTime, weatherWindDirection, weatherWindSpeed, weatherCloudiness)
+        console.log("id: ", id, "name: ", name, "time: ", now.toISOString(), "weatherWindDirection: ", weatherWindDirection, "weatherWindSpeed: ", weatherWindSpeed, "weatherCloudiness: ", weatherCloudiness, "timeScale: ", timeScale, "automaticWeather: ", automaticWeather, "automaticTime: ", automaticTime);
+        callEditSzenario(id, name, now.toISOString(), timeScale, automaticWeather, automaticTime, weatherWindDirection, weatherWindSpeed, weatherCloudiness)
             .then(szenario => {
                 setEditSzenario(szenario);
                 setEditSzenarioFailed(false);
@@ -69,7 +58,7 @@ export const EditSzenarioForm = () => {
     }
 
     function convertCloudiness(value: string) {
-        switch(value) {
+        switch (value) {
             case "Regen": {
                 setWeatherCloudiness("RAIN")
                 break;
@@ -92,6 +81,18 @@ export const EditSzenarioForm = () => {
             }
         }
         return undefined;
+    }
+
+    function setTimeToMoment(value: string) {
+        now.set({"hour": parseInt(value.slice(0, 2)), "minute": parseInt(value.slice(4, 6)), "second": 0, "millisecond":0})
+    }
+
+    function setDateToMoment(value: string) {
+        now.set({
+            "year": parseInt(value.slice(0, 4)),
+            "month": parseInt(value.slice(5, 7))-1,
+            "date": parseInt(value.slice(8, 10))
+        })
     }
 
     return (
@@ -140,14 +141,14 @@ export const EditSzenarioForm = () => {
                         </Col>
                     </FormGroup>
                     <FormGroup row>
-                        <Label for="timeScenario" sm={2}>
-                            Time
+                        <Label for="dateScenario" sm={2}>
+                            Date
                         </Label>
                         <Col sm={10}>
                             <Input
-                                onChange={(e: any) => setTime(e.target.value)}
-                                name="time"
-                                placeholder="time placeholder"
+                                onChange={(e: any) => setDateToMoment(e.target.value)}
+                                name="date"
+                                placeholder="date placeholder"
                                 type="date"
                             />
                         </Col>
@@ -158,7 +159,7 @@ export const EditSzenarioForm = () => {
                         </Label>
                         <Col sm={10}>
                             <Input
-                                onChange={(e: any) => setTime(e.target.value)}
+                                onChange={(e: any) => setTimeToMoment(e.target.value)}
                                 name="time"
                                 placeholder="time placeholder"
                                 type="time"
@@ -209,7 +210,8 @@ export const EditSzenarioForm = () => {
                             Cloudiness
                         </Label>
                         <Col sm={10}>
-                            <Input type="select" name="cloudiness" onChange={(e: any ) => convertCloudiness(e.target.value)} >
+                            <Input type="select" name="cloudiness"
+                                   onChange={(e: any) => convertCloudiness(e.target.value)}>
                                 <option>Klar</option>
                                 <option>Wolkig 1</option>
                                 <option>Wolkig 2</option>
