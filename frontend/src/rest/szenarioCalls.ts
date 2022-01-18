@@ -56,3 +56,8 @@ export const callDeleteSzenario = (id: number): Promise<SzenarioResponse> => {
 export const callScenarioAll = () => {
     return axios.get("/scenario/all")
 }
+export const callGetScenario = (id: number): Promise<SzenarioResponse> => {
+    return axios.get(`/scenario/id/${id}`)
+        .then(response => Promise.resolve(response.data))
+        .catch(error => Promise.reject(error))
+}

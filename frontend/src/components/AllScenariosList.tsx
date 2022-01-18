@@ -2,10 +2,12 @@ import {Container, Row, Col, Card, CardBody, CardTitle, CardText, Button, List} 
 import {useEffect, useState} from "react";
 import {callScenarioAll, SzenarioResponse} from "../rest/szenarioCalls";
 import {CreateSzenarioForm} from "./CreateSzenarioForm";
+import {useNavigate} from "react-router-dom";
 
 export const AllScenariosList = () => {
    const [scenarios, setScenarios] = useState<SzenarioResponse[]>([]);
    const [isLoaded, setLoaded] = useState<boolean>(false);
+   const navigate = useNavigate();
    useEffect( () => {
        if(!isLoaded){
            callScenarioAll()
@@ -23,11 +25,11 @@ export const AllScenariosList = () => {
                 <Row xs={3}>
                     {scenarios.map((e,i) => {
                         return(
-                        <Col>
+                        <Col key={i}>
                             <Card>
                                 <CardBody>
                                     <CardTitle>{e.name}</CardTitle>
-                                    <CardText>
+                                    <CardText tag={"div"}>
                                         <List>
                                             <li>
                                                 Zeit: {e.time}
@@ -48,7 +50,7 @@ export const AllScenariosList = () => {
 
                                     </CardText>
 
-                                    <Button>Bearbeiten</Button>
+                                    <Button onClick={() => navigate("/edit/"+e.id)}>Bearbeiten</Button>
                                 </CardBody>
                             </Card>
                         </Col>
