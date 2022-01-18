@@ -3,10 +3,14 @@ import React, {useState} from "react";
 import {callDeleteSzenario, callEditSzenario, SzenarioResponse} from "../rest/szenarioCalls";
 import moment from "moment";
 
+export interface EditSzenarioFormProps{
+    szenario:SzenarioResponse
+}
 
-export const EditSzenarioForm = () => {
-    const [id, setId] = useState<number>(1);
-    const [name, setName] = useState<string>("");
+export const EditSzenarioForm = (props:EditSzenarioFormProps) => {
+    const szenario = props.szenario;
+    const [id, setId] = useState<number>(szenario.id);
+    const [name, setName] = useState<string>(szenario.name);
     const [time, setTime] = useState<number>(1);
     const [timeScale, setTimeScale] = useState<number>(1);
     const [automaticWeather, setAutomaticWeather] = useState<boolean>(false);
@@ -117,6 +121,7 @@ export const EditSzenarioForm = () => {
                         </Label>
                         <Col sm={10}>
                             <Input
+                                value={id}
                                 onChange={(e: any) => setId(e.target.value)}
                                 name="id"
                                 placeholder="ID deines Szenarios"

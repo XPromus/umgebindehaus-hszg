@@ -27,12 +27,24 @@ export const EditPage = () => {
             })
     })
     console.log(getSzenario);
+    if(getSzenario===undefined){
+        return(
+            <div>
+                <NavbarScenario/>
+                <div className="App edit-page">
+                    <Container>
+                        Szenario not found
+                    </Container>
+                </div>
+            </div>
+        )
+    }
     return (
         <div>
             <NavbarScenario/>
             <div className="App edit-page">
                 <Container>
-                    <EditSzenarioForm/>
+                    <EditSzenarioForm szenario={getSzenario}/>
                 </Container>
             </div>
         </div>
