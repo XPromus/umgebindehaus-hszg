@@ -13,10 +13,6 @@ services:
       - "./files/db-data:/var/lib/mysql"
     networks:
       - ugh-lan
-    command:
-      - "mariadbd"
-      - "--character-set-server=utf8mb4"
-      - "--collation-server=utf8mb4_unicode_ci"
 
   ugh-server:
     image: "adoptopenjdk/openjdk11"
