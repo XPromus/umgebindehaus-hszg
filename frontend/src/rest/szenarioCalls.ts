@@ -32,9 +32,16 @@ export const callCreateSzenario = (name: string): Promise<SzenarioResponse> => {
         .then(response => Promise.resolve(response.data))
         .catch(error => Promise.reject(error))
 }
-export const callEditSzenario = (id: number,name: string,time: number,timeScale: number, automaticWeather: boolean, automaticTime: boolean, weatherWindDiretion: number, weatherWindSpeed: number, weatherCloudiness: string): Promise<SzenarioResponse> => {
+export const callEditSzenario = (id: number, name: string, time: string, timeScale: number, automaticWeather: boolean, automaticTime: boolean, weatherWindDiretion: number, weatherWindSpeed: number, weatherCloudiness: string): Promise<SzenarioResponse> => {
     return axios.post("/scenario/edit/" + id, {
-        newName: name, newTime: "2022-01-11T11:04:17Z", newTimeScale: timeScale, newAutomaticWeather: automaticWeather, newAutomaticTime: automaticTime, newWeatherWindDirection: weatherWindDiretion, newWeatherWindSpeed: weatherWindSpeed, newWeatherCloudiness: weatherCloudiness
+        newName: name,
+        newTime: time,
+        newTimeScale: timeScale,
+        newAutomaticWeather: automaticWeather,
+        newAutomaticTime: automaticTime,
+        newWeatherWindDirection: weatherWindDiretion,
+        newWeatherWindSpeed: weatherWindSpeed,
+        newWeatherCloudiness: weatherCloudiness
     })
         .then(response => Promise.resolve(response.data))
         .catch(error => Promise.reject(error))
