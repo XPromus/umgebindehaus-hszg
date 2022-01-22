@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import {callScenarioAll, SzenarioResponse} from "../rest/szenarioCalls";
 import {CreateSzenarioForm} from "./CreateSzenarioForm";
 import {useNavigate} from "react-router-dom";
+import moment from "moment";
 
 export const AllScenariosList = () => {
    const [scenarios, setScenarios] = useState<SzenarioResponse[]>([]);

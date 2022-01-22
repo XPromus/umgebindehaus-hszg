@@ -12,12 +12,12 @@ export const EditSzenarioForm = (props:EditSzenarioFormProps) => {
     const [id, setId] = useState<number>(szenario.id);
     const [name, setName] = useState<string>(szenario.name);
     const [time, setTime] = useState<number>(1);
-    const [timeScale, setTimeScale] = useState<number>(1);
-    const [automaticWeather, setAutomaticWeather] = useState<boolean>(false);
-    const [automaticTime, setAutomaticTime] = useState<boolean>(false);
-    const [weatherWindDirection, setWeatherWindDirection] = useState<number>(1);
-    const [weatherWindSpeed, setWeatherWindSpeed] = useState<number>(1);
-    const [weatherCloudiness, setWeatherCloudiness] = useState<string>("");
+    const [timeScale, setTimeScale] = useState<number>(szenario.timeScale);
+    const [automaticWeather, setAutomaticWeather] = useState<boolean>(szenario.automaticWeather);
+    const [automaticTime, setAutomaticTime] = useState<boolean>(szenario.automaticTime);
+    const [weatherWindDirection, setWeatherWindDirection] = useState<number>(szenario.weather.windDirection);
+    const [weatherWindSpeed, setWeatherWindSpeed] = useState<number>(szenario.weather.windSpeed);
+    const [weatherCloudiness, setWeatherCloudiness] = useState<string>(szenario.weather.cloudiness);
 
     const now = moment();
 
@@ -138,6 +138,7 @@ export const EditSzenarioForm = (props:EditSzenarioFormProps) => {
                         </Label>
                         <Col sm={10}>
                             <Input
+                                value={name}
                                 onChange={(e: any) => setName(e.target.value)}
                                 name="name"
                                 placeholder="Name deines Szenarios"
@@ -180,6 +181,7 @@ export const EditSzenarioForm = (props:EditSzenarioFormProps) => {
                         </Label>
                         <Col sm={10}>
                             <Input
+                                value={weatherWindDirection}
                                 onChange={(e: any) => setWeatherWindDirection(parseFloat(e.target.value))}
                                 name="windDirection"
                                 placeholder="Richtung des Windes"
@@ -197,6 +199,7 @@ export const EditSzenarioForm = (props:EditSzenarioFormProps) => {
                         </Label>
                         <Col sm={10}>
                             <Input
+                                value={weatherWindSpeed}
                                 onChange={(e: any) => setWeatherWindSpeed(parseFloat(e.target.value))}
                                 name="windSpeed"
                                 placeholder="Geschwindigkeit des Windes"
@@ -215,8 +218,11 @@ export const EditSzenarioForm = (props:EditSzenarioFormProps) => {
                             Cloudiness
                         </Label>
                         <Col sm={10}>
-                            <Input type="select" name="cloudiness"
-                                   onChange={(e: any) => convertCloudiness(e.target.value)}>
+                            <Input
+                                value={weatherCloudiness}
+                                type="select"
+                                name="cloudiness"
+                                onChange={(e: any) => convertCloudiness(e.target.value)}>
                                 <option>Klar</option>
                                 <option>Wolkig 1</option>
                                 <option>Wolkig 2</option>
@@ -234,6 +240,7 @@ export const EditSzenarioForm = (props:EditSzenarioFormProps) => {
                         </Label>
                         <Col sm={10}>
                             <Input
+                                value={timeScale}
                                 onChange={(e: any) => setTimeScale(parseInt(e.target.value))}
                                 name="timeScale"
                                 placeholder="Zeitskala deines Szenarios"
@@ -256,6 +263,7 @@ export const EditSzenarioForm = (props:EditSzenarioFormProps) => {
                         >
                             <FormGroup check>
                                 <Input
+                                    checked={automaticWeather}
                                     type="checkbox"
                                     onChange={(e: any) => setAutomaticWeather(e.target.checked)}
                                 />
@@ -276,6 +284,7 @@ export const EditSzenarioForm = (props:EditSzenarioFormProps) => {
                         >
                             <FormGroup check>
                                 <Input
+                                    checked={automaticTime}
                                     id="checkboxAutomaticTime"
                                     onChange={(e: any) => setAutomaticTime(e.target.checked)}
                                     type="checkbox"
