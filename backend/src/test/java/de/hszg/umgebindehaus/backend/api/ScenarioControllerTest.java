@@ -3,10 +3,16 @@ package de.hszg.umgebindehaus.backend.api;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.Assert;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootTest (
         webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT
@@ -17,22 +23,24 @@ public class ScenarioControllerTest extends AbstractTestNGSpringContextTests {
     @Test
     public void createScenario() {
 
+        var name = "Name";
+
         RestAssured.port = 8080;
         RestAssured.given()
                 .accept(ContentType.JSON)
                 .contentType(ContentType.JSON)
-                .body("Name")
+                .body(name)
                 .when()
                 .post("/scenario/create")
                 .body()
                 .print();
 
-        RestAssured.get("/scenario/name/Name").then().statusCode(200);
+        RestAssured.get("/scenario/name/" + name).then().statusCode(200);
 
     }
 
     @Test
-    public void editScenario() {
+    public void editScenario() throws JSONException {
 
         RestAssured.port = 8080;
 
@@ -43,7 +51,8 @@ public class ScenarioControllerTest extends AbstractTestNGSpringContextTests {
                 .when()
                 .post("/scenario/create");
 
-        var id = createRequest.body().print();
+        var jsonObject = new JSONObject(createRequest.body().asString());
+        var id = jsonObject.get("id");
 
         var changes = "{" +
                 "\"newName\":\"New Name\"," +
@@ -73,23 +82,26 @@ public class ScenarioControllerTest extends AbstractTestNGSpringContextTests {
                 .post("/scenario/edit/" + id);
 
         response.then().statusCode(200);
-        Assert.assertEquals(response.body().print(), expectedBody);
+        Assert.assertEquals(response.body().asString(), expectedBody);
 
     }
 
     @Test
-    public void deleteScenario() {
+    public void deleteScenario() throws JSONException {
 
         RestAssured.port = 8080;
-        RestAssured.given()
+        var request = RestAssured.given()
                 .accept(ContentType.JSON)
                 .contentType(ContentType.JSON)
                 .body("Name")
                 .when()
                 .post("/scenario/create");
 
-        RestAssured.given().delete("/scenario/delete/3").then().statusCode(200);
-        RestAssured.given().get("/scenario/id/3").then().statusCode(404);
+        var jsonObject = new JSONObject(request.body().asString());
+        var id = jsonObject.get("id");
+
+        RestAssured.given().delete("/scenario/delete/" + id).then().statusCode(200);
+        RestAssured.given().get("/scenario/id/" + id).then().statusCode(404);
 
     }
 
@@ -125,7 +137,7 @@ public class ScenarioControllerTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void getScenarioById() {
+    public void getScenarioById() throws JSONException {
 
         RestAssured.port = 8080;
         var request = RestAssured.given()
@@ -135,10 +147,9 @@ public class ScenarioControllerTest extends AbstractTestNGSpringContextTests {
                 .when()
                 .post("/scenario/create");
 
-        var id = request.body().print();
-
+        var jsonObject = new JSONObject(request.body().asString());
+        var id = jsonObject.get("id");
         var response = RestAssured.given().get("/scenario/id/" + id);
-        var responseBody = response.body().print();
         response.then().statusCode(200);
 
     }
