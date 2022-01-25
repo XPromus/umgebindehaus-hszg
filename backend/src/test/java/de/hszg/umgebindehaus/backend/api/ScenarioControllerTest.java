@@ -36,7 +36,14 @@ public class ScenarioControllerTest extends AbstractTestNGSpringContextTests {
 
         RestAssured.port = 8080;
 
-        final String id = "3";
+        var createRequest = RestAssured.given()
+                .accept(ContentType.JSON)
+                .contentType(ContentType.JSON)
+                .body("Name")
+                .when()
+                .post("/scenario/create");
+
+        var id = createRequest.body().print();
 
         var changes = "{" +
                 "\"newName\":\"New Name\"," +
@@ -57,13 +64,6 @@ public class ScenarioControllerTest extends AbstractTestNGSpringContextTests {
                 "\"timeScale\":2.0," +
                 "\"automaticWeather\":true," +
                 "\"automaticTime\":true}";
-
-        RestAssured.given()
-                .accept(ContentType.JSON)
-                .contentType(ContentType.JSON)
-                .body("Name")
-                .when()
-                .post("/scenario/create");
 
         Response response = RestAssured.given()
                 .accept(ContentType.JSON)
@@ -127,15 +127,15 @@ public class ScenarioControllerTest extends AbstractTestNGSpringContextTests {
     @Test
     public void getScenarioById() {
 
-        var id = "3";
-
         RestAssured.port = 8080;
-        RestAssured.given()
+        var request = RestAssured.given()
                 .accept(ContentType.JSON)
                 .contentType(ContentType.JSON)
                 .body("Test Scenario")
                 .when()
                 .post("/scenario/create");
+
+        var id = request.body().print();
 
         var response = RestAssured.given().get("/scenario/id/" + id);
         var responseBody = response.body().print();
