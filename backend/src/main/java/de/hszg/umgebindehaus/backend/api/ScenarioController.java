@@ -3,10 +3,12 @@ package de.hszg.umgebindehaus.backend.api;
 
 import de.hszg.umgebindehaus.backend.api.error.DuplicateNameException;
 import de.hszg.umgebindehaus.backend.api.error.ResourceNotFoundException;
+import de.hszg.umgebindehaus.backend.api.error.UnknownErrorException;
 import de.hszg.umgebindehaus.backend.data.model.Scenario;
 import de.hszg.umgebindehaus.backend.service.ScenePropertiesEdit;
 import de.hszg.umgebindehaus.backend.service.ScenarioService;
 import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -28,13 +30,19 @@ public class ScenarioController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Object> createScenario(@RequestBody String name) {
+    public ResponseEntity<Scenario> createScenario(@RequestBody String name) {
         Scenario scenario = null;
 
         try {
             scenario = scenarioService.createScenario(name);
         } catch (DataIntegrityViolationException e) {
-            throw new DuplicateNameException("A Scenario with the given name already exists");
+            String errorMessage = e.getMessage();
+            if (errorMessage.contains("PUBLIC.SCENARIO(NAME)")) {
+                throw new DuplicateNameException("A Scenario with the given name already exists");
+            } else {
+                e.printStackTrace();
+                throw new UnknownErrorException("An unknown Error has occurred");
+            }
         }
 
         return ResponseEntity
@@ -77,12 +85,25 @@ public class ScenarioController {
 
     @PostMapping("/edit/{id}")
     public Scenario editScenario(@PathVariable Integer id, @RequestBody ScenePropertiesEdit changes) {
-        final Optional<Scenario> scenario = scenarioService.getScenarioById(id);
-        if (scenario.isEmpty()) {
+        final Optional<Scenario> optionalScenario = scenarioService.getScenarioById(id);
+        if (optionalScenario.isEmpty()) {
             throw new ResourceNotFoundException("No scenario with the id " + id + " was found.");
         }
 
-        return scenarioService.editScenario(scenario.get(), changes);
+        Scenario scenario = null;
+        try {
+            scenario = scenarioService.editScenario(optionalScenario.get(), changes);
+        } catch (DataIntegrityViolationException e) {
+            String errorMessage = e.getMessage();
+            if (errorMessage.contains("PUBLIC.SCENARIO(NAME)")) {
+                throw new DuplicateNameException("A Scenario with the given name already exists");
+            } else {
+                e.printStackTrace();
+                throw new UnknownErrorException("An unknown Error has occurred");
+            }
+        }
+
+        return scenario;
     }
 
 }

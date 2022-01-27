@@ -56,21 +56,4 @@ public class CustomExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(message);
     }
-
-
-    @ExceptionHandler(DuplicateNameException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorMessage> handleDataIntegrityViolationException(DuplicateNameException e, WebRequest request) {
-        ErrorMessage message = new ErrorMessage(
-                LocalDateTime.now(),
-                HttpStatus.BAD_REQUEST.value(),
-                HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                "A Scenario with the given name already exists",
-                request.getDescription(false).replace("uri=", "")
-        );
-
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(message);
-    }
 }
