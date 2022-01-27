@@ -1,5 +1,7 @@
 package de.hszg.umgebindehaus.backend.api.error;
 
+import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -10,8 +12,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
-import java.util.logging.ErrorManager;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 @ControllerAdvice
 public class CustomExceptionHandler {
@@ -43,13 +44,28 @@ public class CustomExceptionHandler {
             messageBody = "There is an error with the value of 'newWeatherCloudiness'";
         }
 
-        //System.out.println(e.getRootCause().getMessage() + "\n\n");
-        //System.out.println(e.getRootCause().toString() + "\n\n");
         ErrorMessage message = new ErrorMessage(
                 LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 messageBody,
+                request.getDescription(false).replace("uri=", "")
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(message);
+    }
+
+
+    @ExceptionHandler(DuplicateNameException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorMessage> handleDataIntegrityViolationException(DuplicateNameException e, WebRequest request) {
+        ErrorMessage message = new ErrorMessage(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                "A Scenario with the given name already exists",
                 request.getDescription(false).replace("uri=", "")
         );
 

@@ -42,7 +42,7 @@ public class ScenarioService{
     }
 
     @Transactional
-    public Scenario editScenario(@NotNull Scenario scenario, @NotNull ScenePropertiesEdit changes){
+    public Scenario editScenario(@NotNull Scenario scenario, @NotNull ScenePropertiesEdit changes) {
         changes.applyChanges(scenario);
         return scenarioRepo.save(scenario);
     }

@@ -1,13 +1,19 @@
 package de.hszg.umgebindehaus.backend.api;
 
 
+import de.hszg.umgebindehaus.backend.api.error.DuplicateNameException;
 import de.hszg.umgebindehaus.backend.api.error.ResourceNotFoundException;
 import de.hszg.umgebindehaus.backend.data.model.Scenario;
 import de.hszg.umgebindehaus.backend.service.ScenePropertiesEdit;
 import de.hszg.umgebindehaus.backend.service.ScenarioService;
+import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,8 +28,18 @@ public class ScenarioController {
     }
 
     @PostMapping("/create")
-    public Scenario createScenario(@RequestBody String name) {
-        return scenarioService.createScenario(name);
+    public ResponseEntity<Object> createScenario(@RequestBody String name) {
+        Scenario scenario = null;
+
+        try {
+            scenario = scenarioService.createScenario(name);
+        } catch (DataIntegrityViolationException e) {
+            throw new DuplicateNameException("A Scenario with the given name already exists");
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(scenario);
     }
 
     @GetMapping("/id/{id}")
