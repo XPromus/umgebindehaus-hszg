@@ -1,18 +1,15 @@
 package de.hszg.umgebindehaus.backend.api.error;
 
-import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
-import org.springframework.dao.DataIntegrityViolationException;
+import de.hszg.umgebindehaus.backend.api.error.JSONValueExceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.context.request.WebRequest;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
-import java.sql.SQLIntegrityConstraintViolationException;
 
 @ControllerAdvice
 public class CustomExceptionHandler {
@@ -21,39 +18,27 @@ public class CustomExceptionHandler {
     public void handleEntityNotFound() {}
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorMessage> handleHttpMessageNotReadableException(HttpMessageNotReadableException e, WebRequest request) {
-        String messageBody = "The JSON-String could not be converted to an Object";
-        String rootCauseMessage = e.getRootCause().getMessage();
+    public void handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+        String exceptionMessage = e.getMessage();
 
-        if (rootCauseMessage.contains("newName")) {
-            messageBody = "There is an error with the value of 'newName'";
-        } else if (rootCauseMessage.contains("newTime")) {
-            messageBody = "There is an error with the value of 'newTime'";
-        } else if (rootCauseMessage.contains("newTimeScale")) {
-            messageBody = "There is an error with the value of 'newTimeScale'";
-        } else if (rootCauseMessage.contains("newAutomaticWeather")) {
-            messageBody = "There is an error with the value of 'newAutomaticWeather'";
-        } else if (rootCauseMessage.contains("newAutomaticTime")) {
-            messageBody = "There is an error with the value of 'newAutomaticTime'";
-        } else if (rootCauseMessage.contains("newWeatherWindDirection")) {
-            messageBody = "There is an error with the value of 'newWeatherWindDirection'";
-        } else if (rootCauseMessage.contains("newWeatherWindSpeed")) {
-            messageBody = "There is an error with the value of 'newWeatherWindSpeed'";
-        } else if (rootCauseMessage.contains("newWeatherCloudiness")) {
-            messageBody = "There is an error with the value of 'newWeatherCloudiness'";
+        if (exceptionMessage.contains("newName")) {
+            throw new NewNameValueException("There is an error with the value of 'newName'");
+        } else if (exceptionMessage.contains("newTime")) {
+            throw new NewTimeValueException("There is an error with the value of 'newTime'");
+        } else if (exceptionMessage.contains("newTimeScale")) {
+            throw new NewTimeScaleValueException("There is an error with the value of 'newTimeScale'");
+        } else if (exceptionMessage.contains("newAutomaticWeather")) {
+            throw new NewAutomaticWeatherValueException("There is an error with the value of 'newAutomaticWeather'");
+        } else if (exceptionMessage.contains("newAutomaticTime")) {
+            throw new NewAutomaticTimeValueException("There is an error with the value of 'newAutomaticTime'");
+        } else if (exceptionMessage.contains("newWeatherWindDirection")) {
+            throw new NewWeatherWindDirectionValueException("There is an error with the value of 'newWeatherWindDirection'");
+        } else if (exceptionMessage.contains("newWeatherWindSpeed")) {
+            throw new NewWeatherWindSpeedValueException("There is an error with the value of 'newWeatherWindSpeed'");
+        } else if (exceptionMessage.contains("newWeatherCloudiness")) {
+            throw new NewWeatherCloudinessValueException("There is an error with the value of 'newWeatherCloudiness'");
+        } else {
+            throw new FaultyJSONException("The JSON-String could not be converted to an Object");
         }
-
-        ErrorMessage message = new ErrorMessage(
-                LocalDateTime.now(),
-                HttpStatus.BAD_REQUEST.value(),
-                HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                messageBody,
-                request.getDescription(false).replace("uri=", "")
-        );
-
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(message);
     }
 }
