@@ -1,0 +1,24 @@
+version: "3.9"
+
+networks:
+  ugh-lan:
+    driver: bridge
+
+services:
+  ugh-db:
+    build:
+      context: .
+      dockerfile: db.dockerfile
+    volumes:
+      - "../files/db-data:/var/lib/mysql"
+    networks:
+      - ugh-lan
+
+  ugh-server:
+    build:
+      context: .
+      dockerfile: server.dockerfile
+    networks:
+      - ugh-lan
+    ports:
+      - "8080:8080"
