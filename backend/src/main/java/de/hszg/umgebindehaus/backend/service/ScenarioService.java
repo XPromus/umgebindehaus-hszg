@@ -1,6 +1,6 @@
 package de.hszg.umgebindehaus.backend.service;
 
-import de.hszg.umgebindehaus.backend.api.error.ResourceNotFoundException;
+import de.hszg.umgebindehaus.backend.components.DefaultScenarios;
 import de.hszg.umgebindehaus.backend.data.model.Scenario;
 import de.hszg.umgebindehaus.backend.data.repos.ScenarioRepo;
 import org.springframework.stereotype.Service;
@@ -14,15 +14,25 @@ import java.util.Optional;
 public class ScenarioService{
 
     private final ScenarioRepo scenarioRepo;
+    private final DefaultScenarios defaults;
 
-    public ScenarioService(ScenarioRepo scenarioRepo){
+    public ScenarioService(ScenarioRepo scenarioRepo, DefaultScenarios defaults){
         this.scenarioRepo = scenarioRepo;
+        this.defaults = defaults;
     }
 
     @Transactional
     public Scenario createScenario(String name){
         final Scenario ret = new Scenario();
         ret.setName(name);
+
+        // apply defaults
+        final var defaultScenario = defaults.getDefaultScenario();
+        ret.setTime(defaultScenario.getTime());
+        ret.setTimeScale(defaultScenario.getTimeScale());
+        ret.setAutomaticTime(defaultScenario.getAutomaticTime());
+        ret.setAutomaticWeather(defaultScenario.getAutomaticWeather());
+        ret.setWeather(defaultScenario.getWeather());
 
         return scenarioRepo.save(ret);
     }

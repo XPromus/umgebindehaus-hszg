@@ -1,0 +1,33 @@
+{
+  "defaultWeather": {
+    "windDirection": 0.0,
+    "windSpeed": 0.0,
+    "cloudiness": "CLEAR"
+  },
+  "defaultScenarios": [
+    {
+      "name": "Example 1",
+      "time": "2022-01-11T16:04:50.323493",
+      "weather": {
+        "windDirection": 0.0,
+        "windSpeed": 0.0,
+        "cloudiness": "CLEAR"
+      },
+      "timeScale": 1.0,
+      "automaticWeather": true,
+      "automaticTime": true
+    },
+    {
+      "name": "Example 2",
+      "time": "2021-06-20T13:00:00",
+      "weather": {
+        "windDirection": 2.5,
+        "windSpeed": 0.0,
+        "cloudiness": "CLOUDY_1"
+      },
+      "timeScale": 5.0,
+      "automaticWeather": false,
+      "automaticTime": true
+    }
+  ]
+}
