@@ -10,3 +10,7 @@ spring:
 
 project:
   description: "server for Umgebindehaus server-project"
+
+server:
+  error:
+    include-message: always

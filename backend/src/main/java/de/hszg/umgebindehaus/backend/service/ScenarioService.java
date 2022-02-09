@@ -3,6 +3,7 @@ package de.hszg.umgebindehaus.backend.service;
 import de.hszg.umgebindehaus.backend.components.DefaultScenarios;
 import de.hszg.umgebindehaus.backend.data.model.Scenario;
 import de.hszg.umgebindehaus.backend.data.repos.ScenarioRepo;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -22,9 +23,10 @@ public class ScenarioService{
     }
 
     @Transactional
-    public Scenario createScenario(String name){
+    public Scenario createScenario(String name) {
         final Scenario ret = new Scenario();
         ret.setName(name);
+        //ToDo Doppelte Eingabe des selben Namen muss behandelt werden
 
         // apply defaults
         final var defaultScenario = defaults.getDefaultScenario();
@@ -50,7 +52,7 @@ public class ScenarioService{
     }
 
     @Transactional
-    public Scenario editScenario(@NotNull Scenario scenario, @NotNull ScenePropertiesEdit changes){
+    public Scenario editScenario(@NotNull Scenario scenario, @NotNull ScenePropertiesEdit changes) {
         changes.applyChanges(scenario);
         return scenarioRepo.save(scenario);
     }
