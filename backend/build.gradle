@@ -42,11 +42,11 @@ test {
 tasks.register("dockerprepare", Copy) {
     from(file("src/docker"))
     from(file(project.buildDir.absolutePath + "/libs"))
-    into(file(project.buildDir.absolutePath + "/docker"))
+    into(file(project.buildDir.absolutePath + "/docker/compose/files/server-files"))
 }
 
 tasks.register("dockerbuild", Exec) {
     dependsOn("dockerprepare")
-    workingDir(file(project.buildDir.absolutePath + "/docker"))
+    workingDir(file(project.buildDir.absolutePath + "/docker/compose/files/server-files"))
     commandLine("docker", "build", ".", "-t", "ugh")
 }
