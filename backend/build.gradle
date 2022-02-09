@@ -38,3 +38,15 @@ dependencies {
 test {
     useTestNG()
 }
+
+tasks.register("dockerprepare", Copy) {
+    from(file("src/docker"))
+    from(file(project.buildDir.absolutePath + "/libs"))
+    into(file(project.buildDir.absolutePath + "/docker"))
+}
+
+tasks.register("dockerbuild", Exec) {
+    dependsOn("dockerprepare")
+    workingDir(file(project.buildDir.absolutePath + "/docker"))
+    commandLine("docker", "build", ".", "-t", "ugh")
+}
