@@ -6,8 +6,10 @@
  */
 tasks.register("startLocalInfra", Exec) {
     group("docker")
+    dependsOn(project(":backend").tasks.getByName("dockerprepare"))
 
     workingDir file(project.projectDir.absolutePath + "/docker/compose")
+    environment 'DOCKER_HOST', "${project.properties.get('dockerHost')}"
     commandLine "docker-compose", "up", "-d"
 }
 
@@ -15,5 +17,6 @@ tasks.register("stopLocalInfra", Exec) {
     group("docker")
 
     workingDir file(project.projectDir.absolutePath + "/docker/compose")
+    environment 'DOCKER_HOST', "${project.properties.get('dockerHost')}"
     commandLine "docker-compose", "down"
 }

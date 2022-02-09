@@ -48,11 +48,3 @@ tasks.register("dockerprepare", Copy) {
         return "server.jar"
     }
 }
-
-tasks.register("dockerbuild", Exec) {
-    group("docker")
-    dependsOn("dockerprepare")
-
-    workingDir file(project.parent.projectDir.absolutePath + "/docker/compose/")
-    commandLine "docker", "build", ".", "-t", "ugh"
-}
