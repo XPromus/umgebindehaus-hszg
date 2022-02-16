@@ -63,3 +63,4 @@ sysinfo.txt
 crashlytics-build.properties
 
 /docker/files/db-data/
+/docker/compose/files/server-files/server.jar
