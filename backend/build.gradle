@@ -41,6 +41,7 @@ test {
 
 tasks.register("dockerprepare", Copy) {
     group("docker")
+    dependsOn("bootJar")
 
     from file(project.buildDir.absolutePath + "/libs/${project.name}-${project.version}.jar")
     into file(project.parent.projectDir.absolutePath + "/docker/compose/files/server-files")
