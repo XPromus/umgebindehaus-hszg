@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mariadb://compose_ugh-db_1:3306/Umgebindehaus
+    url: jdbc:mariadb://ugh-db:3306/Umgebindehaus
     driver-class-name: org.mariadb.jdbc.Driver
     username: 'umgebindehaus'
     password: '*insecure*'

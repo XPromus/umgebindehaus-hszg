@@ -6,6 +6,7 @@ networks:
 
 services:
   ugh-db:
+    container_name: ugh-db
     build:
       context: .
       dockerfile: db.dockerfile
@@ -15,6 +16,7 @@ services:
       - ugh-lan
 
   ugh-server:
+    container_name: ugh-server
     build:
       context: .
       dockerfile: server.dockerfile
