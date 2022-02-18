@@ -48,11 +48,13 @@ export const CreateSzenarioForm = () => {
                 </Form>
                 {
                     createdSzenario && (
-                        <div>
-                            <h3>Created Szenario: </h3>
-                            <pre>
-                                <code>{JSON.stringify(createdSzenario, null, 2)}</code>
-                            </pre>
+                        <div id="success">
+                            <br/>
+                            Neues Szenario erfolgreich erstellt!
+                            {/*<h3>Created Szenario: </h3>*/}
+                            {/*<pre>*/}
+                            {/*    <code>{JSON.stringify(createdSzenario, null, 2)}</code>*/}
+                            {/*</pre>*/}
                         </div>
                     )
                 }

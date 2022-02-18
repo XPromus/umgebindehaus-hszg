@@ -11,7 +11,8 @@ export const EditSzenarioForm = (props:EditSzenarioFormProps) => {
     const szenario = props.szenario;
     const [id, setId] = useState<number>(szenario.id);
     const [name, setName] = useState<string>(szenario.name);
-    const [time, setTime] = useState<number>(1);
+    const [time, setTime] = useState<string>(convertTime(szenario.time));
+    const [date, setDate] = useState<string>(convertDate(szenario.time));
     const [timeScale, setTimeScale] = useState<number>(szenario.timeScale);
     const [automaticWeather, setAutomaticWeather] = useState<boolean>(szenario.automaticWeather);
     const [automaticTime, setAutomaticTime] = useState<boolean>(szenario.automaticTime);
@@ -20,13 +21,21 @@ export const EditSzenarioForm = (props:EditSzenarioFormProps) => {
     const [weatherCloudiness, setWeatherCloudiness] = useState<string>(szenario.weather.cloudiness);
 
     const now = moment();
-
-    function printConsole() {
-        const formValues = {name, time, timeScale, automaticWeather, automaticTime}
-        // @ts-ignore
-        console.log("formValues", formValues);
-        // @ts-ignore
+    function convertTime(value:string){
+        const momentTime = moment(value, moment.ISO_8601)
+        return momentTime.format("HH:mm")
     }
+    function convertDate(value:string){
+        const momentDate = moment(value, moment.ISO_8601)
+        return momentDate.format("YYYY-MM-DD")
+    }
+
+    // function printConsole() {
+    //     const formValues = {name, time, timeScale, automaticWeather, automaticTime}
+    //     // @ts-ignore
+    //     console.log("formValues", formValues);
+    //     // @ts-ignore
+    // }
 
     const [deleteSzenario, setDeleteSzenario] = useState<SzenarioResponse>();
     const [deleteSzenarioFailed, setDeleteSzenarioFailed] = useState<boolean>(false);
@@ -87,6 +96,28 @@ export const EditSzenarioForm = (props:EditSzenarioFormProps) => {
         return undefined;
     }
 
+    function cloudinessToString(value: string) {
+        switch (value) {
+            case "RAIN": {
+                return "Regen"
+            }
+            case "CLEAR": {
+                return("Klar")
+            }
+            case "CLOUDY_1": {
+                return "Wolkig 1"
+            }
+            case "CLOUDY_2": {
+                return "Wolkig 2"
+            }
+            default: {
+                //statements;
+                break;
+            }
+        }
+        return undefined
+    }
+
     function setTimeToMoment(value: string) {
         now.set({"hour": parseInt(value.slice(0, 2)), "minute": parseInt(value.slice(4, 6)), "second": 0, "millisecond":0})
     }
@@ -112,23 +143,23 @@ export const EditSzenarioForm = (props:EditSzenarioFormProps) => {
                     )
                 }
                 <Form>
-                    <FormGroup row>
-                        <Label
-                            for="idScenario"
-                            sm={2}
-                        >
-                            ID
-                        </Label>
-                        <Col sm={10}>
-                            <Input
-                                value={id}
-                                onChange={(e: any) => setId(e.target.value)}
-                                name="id"
-                                placeholder="ID deines Szenarios"
-                                type="number"
-                            />
-                        </Col>
-                    </FormGroup>
+                    {/*<FormGroup row>*/}
+                    {/*    <Label*/}
+                    {/*        for="idScenario"*/}
+                    {/*        sm={2}*/}
+                    {/*    >*/}
+                    {/*        ID*/}
+                    {/*    </Label>*/}
+                    {/*    <Col sm={10}>*/}
+                    {/*        <Input*/}
+                    {/*            value={id}*/}
+                    {/*            onChange={(e: any) => setId(e.target.value)}*/}
+                    {/*            name="id"*/}
+                    {/*            placeholder="ID deines Szenarios"*/}
+                    {/*            type="number"*/}
+                    {/*        />*/}
+                    {/*    </Col>*/}
+                    {/*</FormGroup>*/}
                     <FormGroup row>
                         <Label
                             for="nameScenario"
@@ -156,6 +187,7 @@ export const EditSzenarioForm = (props:EditSzenarioFormProps) => {
                                 name="date"
                                 placeholder="date placeholder"
                                 type="date"
+                                value={date}
                             />
                         </Col>
                     </FormGroup>
@@ -169,6 +201,7 @@ export const EditSzenarioForm = (props:EditSzenarioFormProps) => {
                                 name="time"
                                 placeholder="time placeholder"
                                 type="time"
+                                value={time}
                             />
                         </Col>
                     </FormGroup>
@@ -219,7 +252,7 @@ export const EditSzenarioForm = (props:EditSzenarioFormProps) => {
                         </Label>
                         <Col sm={10}>
                             <Input
-                                value={weatherCloudiness}
+                                value={cloudinessToString(weatherCloudiness)}
                                 type="select"
                                 name="cloudiness"
                                 onChange={(e: any) => convertCloudiness(e.target.value)}>
@@ -323,13 +356,13 @@ export const EditSzenarioForm = (props:EditSzenarioFormProps) => {
                         Löschen fehlgeschlagen
                     </Alert>
                 )}
-                <pre>
-                    <code>
-                        {
-                            JSON.stringify(editSzenario, null, 2)
-                        }
-                    </code>
-                </pre>
+                {/*<pre>*/}
+                {/*    <code>*/}
+                {/*        {*/}
+                {/*            JSON.stringify(editSzenario, null, 2)*/}
+                {/*        }*/}
+                {/*    </code>*/}
+                {/*</pre>*/}
 
 
             </Card>
