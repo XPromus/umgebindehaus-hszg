@@ -22,7 +22,7 @@ public class Scenario implements SceneProperties{
     @Column(nullable = false, unique = true)
     private String name;
     @Column
-    private LocalDateTime time;//NOTE if this fails, use a converter (to long): https://thorben-janssen.com/persist-localdate-localdatetime-jpa/
+    private LocalDateTime time;
     @Column(nullable = false)
     @Embedded
     private Weather weather;

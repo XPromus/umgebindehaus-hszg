@@ -1,9 +1,16 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: username
-    password: password
+    url: jdbc:mariadb://compose_ugh-db_1:3306/Umgebindehaus
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: 'umgebindehaus'
+    password: '*insecure*'
+  jpa:
+    hibernate:
+      ddl-auto: update
 
 project:
   description: "server for Umgebindehaus server-project"
+
+server:
+  error:
+    include-message: always

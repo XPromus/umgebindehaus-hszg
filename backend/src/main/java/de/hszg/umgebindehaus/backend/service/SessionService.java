@@ -3,15 +3,14 @@ package de.hszg.umgebindehaus.backend.service;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import de.hszg.umgebindehaus.backend.api.error.ResourceNotFoundException;
+import de.hszg.umgebindehaus.backend.components.DefaultScenarios;
 import de.hszg.umgebindehaus.backend.components.UniqueWordGenerator;
 import de.hszg.umgebindehaus.backend.data.model.Scenario;
 import de.hszg.umgebindehaus.backend.data.model.Session;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
-import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -19,12 +18,14 @@ public class SessionService{
 
     private final UniqueWordGenerator idGenerator;
     private final ScenarioService scenarioService;
+    private final DefaultScenarios defaults;
 
     private final Cache<String, Session> sessions;
 
-    public SessionService(UniqueWordGenerator idGenerator, ScenarioService scenarioService){
+    public SessionService(UniqueWordGenerator idGenerator, ScenarioService scenarioService, DefaultScenarios defaults){
         this.idGenerator = idGenerator;
         this.scenarioService = scenarioService;
+        this.defaults = defaults;
 
         sessions = Caffeine.newBuilder()
                 .expireAfterAccess(1, TimeUnit.DAYS)
@@ -38,6 +39,7 @@ public class SessionService{
             while(sessions.getIfPresent(id) != null) {// should not happen but just to make sure
                 id = idGenerator.nextWord();
                 try {
+                    //noinspection BusyWait
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -47,6 +49,14 @@ public class SessionService{
             Session session = new Session();
             session.setId(id);
 
+            // apply defaults
+            final var defaultScenario = defaults.getDefaultScenario();
+            session.setTime(defaultScenario.getTime());
+            session.setTimeScale(defaultScenario.getTimeScale());
+            session.setAutomaticTime(defaultScenario.getAutomaticTime());
+            session.setAutomaticWeather(defaultScenario.getAutomaticWeather());
+            session.setWeather(defaultScenario.getWeather());
+
             sessions.put(id, session);
             return session;
         }
@@ -54,10 +64,9 @@ public class SessionService{
 
     @NotNull
     public Session getSessionById(@NotNull String id){
-        var session = sessions.get(id, e -> {
+        return sessions.get(id, e -> {
             throw new ResourceNotFoundException(String.format("no session with id %s registered", id));
         });
-        return session;
     }
 
     public void removeSession(@NotNull String id){
