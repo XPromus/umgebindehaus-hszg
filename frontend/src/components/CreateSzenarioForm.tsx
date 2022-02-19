@@ -23,7 +23,7 @@ export const CreateSzenarioForm = () => {
         // FIXME: handling
     }
     return (
-        <Card>
+        <Card className="card">
             <Card body>
                 <CardTitle tag="h5" className="card-title">
                     Szenario erstellen
