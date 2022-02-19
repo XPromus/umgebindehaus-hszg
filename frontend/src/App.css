@@ -1,0 +1,47 @@
+.App {
+  text-align: center;
+}
+
+.input-id-content{
+  margin-top: 30%;
+}
+
+.scenario-header{
+  margin: 12px;
+
+}
+
+.session-ID-input{
+  border-top-left-radius: 3rem !important;
+  border-bottom-left-radius: 3rem !important;
+}
+
+.session-ID-button{
+  border-top-right-radius: 3rem !important;
+  border-bottom-right-radius: 3rem !important;
+}
+
+.all-scenarios-button{
+  border-radius: 3rem !important;
+  margin-top: 5%;
+}
+
+@keyframes motionForm {
+  100% {opacity: 100%; visibility: visible}
+}
+
+@keyframes motionInputID {
+  100% {margin-top: 10%;}
+}
+
+.input-form{
+  margin-top: 5rem;
+}
+
+.card-title {
+  text-align: center;
+}
+
+.App-link {
+  color: #61dafb;
+}

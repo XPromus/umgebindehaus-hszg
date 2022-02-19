@@ -62,5 +62,23 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+
+/frontend/node_modules
+/frontend/.pnp
+/frontend/package-lock.json
+/frontend/yarn.lock
+/frontend/build
+
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
 /docker/files/db-data/
 /docker/compose/files/server-files/server.jar
+
